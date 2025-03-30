@@ -12,18 +12,29 @@ import React, { useState } from "react";
 import UserItem from "../components/shared/UserItem";
 import { sampleUsers } from "../constants/sampleData";
 
-const Search = () => {
+const Search = ({ close }) => {
   const search = useInputValidation("");
 
-  const [isLoadingSendFrindRequest, setIsLoadingSendFrindRequest] =
+  const [isLoadingSendFriendRequest, setIsLoadingSendFriendRequest] =
     useState(false);
-
-  const sendFriendRequestHandler = async (userId) => {};
 
   const [users, setUsers] = useState(sampleUsers);
 
+  const sendFriendRequestHandler = async (userId) => {
+    if (!userId) return;
+    setIsLoadingSendFriendRequest(true);
+    try {
+      // await sendFriendRequest(userId);
+      setUsers((prev) => prev.filter((user) => user._id !== userId));
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoadingSendFriendRequest(false);
+    }
+  };
+
   return (
-    <Dialog open>
+    <Dialog open onClose={close}>
       <Stack p={"2rem"} direction={"column"} width={"25rem"}>
         <DialogTitle textAlign={"center"}>Find a friend or group</DialogTitle>
         <TextField
@@ -48,7 +59,7 @@ const Search = () => {
             <UserItem
               user={user}
               key={user._id}
-              handlerIsLoading={isLoadingSendFrindRequest}
+              handlerIsLoading={isLoadingSendFriendRequest}
               handler={sendFriendRequestHandler}
             />
           ))}
