@@ -37,39 +37,42 @@ const Login = () => {
   return (
     <div
       style={{
-        backgroundImage:
-          "linear-gradient(rgba(255, 0, 0, 0.5), rgba(34, 21, 172, 0.5)), url('https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDJ8fGJsdXUlMjBzdGFyJTIwcGF0dGVybnxlbnwwfHx8fDE2OTY5NTQ1NzA&ixlib=rb-4.0.3&q=100&w=1080')",
+        backgroundImage: "linear-gradient(to right, #ff7e5f, #feb47b)",
         backgroundSize: "cover",
         backgroundPosition: "center",
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
       }}
     >
       <Container
         component="main"
         maxWidth="xs"
         sx={{
-          height: "100vh",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
         }}
       >
         <Paper
-          elevation={3}
+          elevation={6}
           sx={{
-            padding: 2,
+            padding: "2rem",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            borderRadius: "12px",
+            background: "rgba(255, 255, 255, 0.9)",
           }}
         >
           {isLogin ? (
             <>
-              <Typography variant="h5">Login</Typography>
+              <Typography variant="h5" fontWeight={600} color="primary">
+                Login
+              </Typography>
               <form
-                style={{
-                  width: "100%",
-                  marginTop: "1rem",
-                }}
+                style={{ width: "100%", marginTop: "1rem" }}
                 onSubmit={handleLogin}
               >
                 <TextField
@@ -79,8 +82,7 @@ const Login = () => {
                   margin="normal"
                   variant="outlined"
                   type="text"
-                  name="username or email"
-                  autoComplete="username or email"
+                  autoComplete="username"
                   autoFocus
                   value={username.value || email.value}
                   onChange={username.changeHandler || email.changeHandler}
@@ -92,9 +94,7 @@ const Login = () => {
                   margin="normal"
                   variant="outlined"
                   type="password"
-                  name="password"
                   autoComplete="current-password"
-                  autoFocus
                   value={password.value}
                   onChange={password.changeHandler}
                 />
@@ -103,43 +103,36 @@ const Login = () => {
                   variant="contained"
                   color="primary"
                   type="submit"
-                  sx={{ marginTop: "1rem" }}
+                  sx={{ mt: 2 }}
                 >
                   Login
                 </Button>
-                <Typography textAlign={"center"} m={"1rem"}>
+                <Typography textAlign="center" mt={2}>
                   OR
                 </Typography>
-                <Typography textAlign={"center"} m={"1rem"}>
-                  Don't have an account?
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    color="secondary"
-                    onClick={toggleLogin}
-                  >
-                    Sign Up
-                  </Button>
-                </Typography>
-                <Typography textAlign={"center"} m={"1rem"}>
-                  By signing in, you agree to our Terms of Service and Privacy
-                  Policy.
-                </Typography>
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  color="secondary"
+                  onClick={toggleLogin}
+                  sx={{ mt: 2 }}
+                >
+                  Sign Up
+                </Button>
               </form>
             </>
           ) : (
             <>
-              <Typography variant="h5">Sign Up</Typography>
+              <Typography variant="h5" fontWeight={600} color="primary">
+                Sign Up
+              </Typography>
               <form
-                style={{
-                  width: "100%",
-                  marginTop: "1rem",
-                }}
+                style={{ width: "100%", marginTop: "1rem" }}
                 onSubmit={handleSignUp}
               >
-                <Stack position={"relative"} width={"8rem"} margin={"auto"}>
+                <Stack position="relative" width="8rem" margin="auto">
                   <Avatar
-                    sx={{ width: "8rem", height: "8rem", objectFit: "contain" }}
+                    sx={{ width: "8rem", height: "8rem" }}
                     src={avatar.preview}
                   />
                   <IconButton
@@ -147,37 +140,19 @@ const Login = () => {
                       position: "absolute",
                       bottom: 0,
                       right: 0,
+                      bgcolor: "primary.main",
                       color: "white",
-                      "&:hover": {
-                        color: "white",
-                      },
-                      bgcolor: "rgba(0,0,0,0.5)",
-                      "&:hover": {
-                        bgcolor: "rgba(0,0,0,0.8)",
-                      },
+                      "&:hover": { bgcolor: "primary.dark" },
                     }}
                     component="label"
                   >
-                    <>
-                      <CameraAltIcon />
-                      <VisuallyHiddenInput
-                        type="file"
-                        onChange={avatar.changeHandler}
-                      />
-                    </>
+                    <CameraAltIcon />
+                    <VisuallyHiddenInput
+                      type="file"
+                      onChange={avatar.changeHandler}
+                    />
                   </IconButton>
                 </Stack>
-                {avatar.error && (
-                  <Typography
-                    m={"0.5rem auto"}
-                    width={"fit-content"}
-                    display={"block"}
-                    color="error"
-                    variant="caption"
-                  >
-                    {avatar.error}
-                  </Typography>
-                )}
                 <TextField
                   required
                   fullWidth
@@ -185,13 +160,9 @@ const Login = () => {
                   margin="normal"
                   variant="outlined"
                   type="text"
-                  name="name"
-                  autoComplete="name"
-                  autoFocus
                   value={name.value}
                   onChange={name.changeHandler}
                 />
-
                 <TextField
                   required
                   fullWidth
@@ -199,19 +170,9 @@ const Login = () => {
                   margin="normal"
                   variant="outlined"
                   type="text"
-                  name="username"
-                  autoComplete="username"
-                  autoFocus
                   value={username.value}
                   onChange={username.changeHandler}
                 />
-
-                {username.error && (
-                  <Typography color="error" variant="caption">
-                    {username.error}
-                  </Typography>
-                )}
-
                 <TextField
                   required
                   fullWidth
@@ -219,13 +180,9 @@ const Login = () => {
                   margin="normal"
                   variant="outlined"
                   type="email"
-                  name="email"
-                  autoComplete="email"
-                  autoFocus
                   value={email.value}
                   onChange={email.changeHandler}
                 />
-
                 <TextField
                   required
                   fullWidth
@@ -233,19 +190,9 @@ const Login = () => {
                   margin="normal"
                   variant="outlined"
                   type="password"
-                  name="password"
-                  autoComplete="current-password"
-                  autoFocus
                   value={password.value}
                   onChange={password.changeHandler}
                 />
-
-                {password.error && (
-                  <Typography color="error" variant="caption">
-                    {password.error}
-                  </Typography>
-                )}
-
                 <TextField
                   required
                   fullWidth
@@ -253,43 +200,31 @@ const Login = () => {
                   margin="normal"
                   variant="outlined"
                   type="password"
-                  name="confirmPassword"
-                  autoComplete="current-password"
-                  autoFocus
                   value={confirmPassword.value}
                   onChange={confirmPassword.changeHandler}
                 />
-
-                {confirmPassword.error && (
-                  <Typography color="error" variant="caption">
-                    {confirmPassword.error}
-                  </Typography>
-                )}
-
                 <Button
                   fullWidth
                   variant="contained"
                   color="primary"
                   type="submit"
-                  sx={{ marginTop: "1rem" }}
+                  sx={{ mt: 2 }}
                 >
                   Sign Up
                 </Button>
               </form>
-              <Typography textAlign={"center"} mt={"1rem"}>
+              <Typography textAlign="center" mt={2}>
                 OR
               </Typography>
-              <Typography textAlign={"center"} m={"0.5rem"}>
-                Already have an account?{" "}
-                <Button
-                  fullWidth
-                  variant="contained"
-                  color="secondary"
-                  onClick={() => setIsLogin(true)}
-                >
-                  Login
-                </Button>
-              </Typography>
+              <Button
+                fullWidth
+                variant="outlined"
+                color="secondary"
+                onClick={toggleLogin}
+                sx={{ mt: 2 }}
+              >
+                Login
+              </Button>
               <Typography textAlign={"center"} m={"0.5rem"}>
                 By signing up, you agree to our Terms of Service and Privacy
                 Policy.
