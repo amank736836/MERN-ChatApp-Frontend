@@ -6,9 +6,11 @@ const UserItem = ({
   user,
   handler,
   handlerIsLoading = null,
-  isAdded = "false",
+  isAdded = false,
 }) => {
   const { _id, name, avatar } = user;
+
+  console.log(isAdded);
 
   return (
     <ListItem>
