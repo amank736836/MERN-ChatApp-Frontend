@@ -53,3 +53,41 @@ export const sampleUsers = [
     avatar: "https://via.placeholder.com/150",
   },
 ];
+
+export const sampleNotifications = [
+  {
+    sender: {
+      name: "John Doe",
+      avatar: "https://www.w3schools.com/howto/img_avatar.png",
+    },
+    _id: "1",
+  },
+  {
+    sender: {
+      name: "Jane Smith",
+      avatar: "https://via.placeholder.com/150",
+    },
+    _id: "2",
+  },
+  {
+    sender: {
+      name: "Alice Johnson",
+      avatar: "https://www.w3schools.com/howto/img_avatar.png",
+    },
+    _id: "3",
+  },
+  {
+    sender: {
+      name: "Bob Brown",
+      avatar: "https://via.placeholder.com/150",
+    },
+    _id: "4",
+  },
+  {
+    sender: {
+      name: "Charlie Davis",
+      avatar: "https://www.w3schools.com/howto/img_avatar.png",
+    },
+    _id: "5",
+  },
+];
