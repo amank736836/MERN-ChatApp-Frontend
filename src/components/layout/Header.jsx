@@ -113,6 +113,7 @@ const Header = () => {
           </Toolbar>
         </AppBar>
       </Box>
+
       {isSearch && (
         <Suspense fallback={<Backdrop open={true} />}>
           <SearchDialog />
