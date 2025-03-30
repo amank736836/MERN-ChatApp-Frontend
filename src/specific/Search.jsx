@@ -7,6 +7,7 @@ import {
   List,
   Stack,
   TextField,
+  Box,
 } from "@mui/material";
 import React, { useState } from "react";
 import UserItem from "../components/shared/UserItem";
@@ -35,26 +36,55 @@ const Search = ({ close }) => {
 
   return (
     <Dialog open onClose={close}>
-      <Stack p={"2rem"} direction={"column"} width={"25rem"}>
-        <DialogTitle textAlign={"center"}>Find a friend or group</DialogTitle>
+      <Box
+        sx={{
+          p: "2rem",
+          width: "28rem",
+          borderRadius: "12px",
+          background: "linear-gradient(135deg, #eef2f3, #8e9eab)",
+        }}
+      >
+        <DialogTitle
+          textAlign="center"
+          fontWeight={600}
+          color="#333"
+          sx={{ pb: 2 }}
+        >
+          Find a Friend or Group
+        </DialogTitle>
         <TextField
-          label=""
           value={search.value}
           onChange={search.changeHandler}
-          varient="outlined"
-          size="small"
+          variant="outlined"
+          size="medium"
+          placeholder="Search for friends or groups..."
+          sx={{
+            width: "100%",
+            bgcolor: "white",
+            borderRadius: "8px",
+            mb: 2,
+          }}
           slotProps={{
             input: {
               startAdornment: (
                 <InputAdornment position="start">
-                  <SearchIcon />
+                  <SearchIcon sx={{ color: "#555" }} />
                 </InputAdornment>
               ),
             },
           }}
         />
 
-        <List>
+        <List
+          sx={{
+            maxHeight: "300px",
+            overflowY: "auto",
+            borderRadius: "8px",
+            backgroundColor: "white",
+            p: "0.5rem",
+            boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.1)",
+          }}
+        >
           {users.map((user) => (
             <UserItem
               user={user}
@@ -64,7 +94,7 @@ const Search = ({ close }) => {
             />
           ))}
         </List>
-      </Stack>
+      </Box>
     </Dialog>
   );
 };
