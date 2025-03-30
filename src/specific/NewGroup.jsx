@@ -1,3 +1,4 @@
+import { useInputValidation } from "6pp";
 import {
   Button,
   Dialog,
@@ -5,11 +6,11 @@ import {
   Stack,
   TextField,
   Typography,
+  Box,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { sampleUsers } from "../constants/sampleData";
 import UserItem from "../components/shared/UserItem";
-import { useInputValidation } from "6pp";
+import { sampleUsers } from "../constants/sampleData";
 import { usernameValidator } from "../utils/validators";
 
 const NewGroup = ({ close }) => {
@@ -39,20 +40,18 @@ const NewGroup = ({ close }) => {
     setSelectedMembers([]);
   }, []);
 
-  console.log(members);
-
   return (
     <Dialog open onClose={close}>
-      <Stack
-        p={{
-          xs: "1rem",
-          sm: "3rem",
+      <Box
+        sx={{
+          p: { xs: "1.5rem", sm: "3rem" },
+          width: "30rem",
+          borderRadius: "12px",
+          background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
         }}
-        width={"25rem"}
-        spacing={"1rem"}
       >
-        <DialogTitle textAlign={"center"} variant="h4">
-          Create a new group
+        <DialogTitle textAlign="center" variant="h4" fontWeight={600}>
+          Create a New Group
         </DialogTitle>
 
         <TextField
@@ -60,30 +59,44 @@ const NewGroup = ({ close }) => {
           onChange={groupName.changeHandler}
           label="Group Name"
           variant="outlined"
-          size="small"
+          size="medium"
+          sx={{
+            width: "100%",
+            bgcolor: "white",
+            borderRadius: "8px",
+          }}
         />
 
-        <Typography variant="body1">
-          Select members to add to the group
+        <Typography variant="body1" fontWeight={500} mt={2}>
+          Select members to add to the group:
         </Typography>
 
-        <Stack>
+        <Stack
+          sx={{
+            maxHeight: "200px",
+            overflowY: "auto",
+            borderRadius: "8px",
+            backgroundColor: "white",
+            p: "0.5rem",
+          }}
+        >
           {members.map((user) => (
             <UserItem
               user={user}
               key={user._id}
               handler={selectMemberHandler}
-              isAdded={selectedMembers.includes(user._id)}
+              isAdded={Boolean(user.isAdded)}
             />
           ))}
         </Stack>
 
-        <Stack direction={"row"} justifyContent={"space-between"}>
+        <Stack direction="row" justifyContent="space-between" mt={3}>
           <Button
             variant="contained"
             color="error"
             size="large"
             onClick={close}
+            sx={{ borderRadius: "8px", fontWeight: 600 }}
           >
             Cancel
           </Button>
@@ -93,21 +106,18 @@ const NewGroup = ({ close }) => {
             size="large"
             disabled={groupName.error}
             sx={{
-              bgcolor: "success.main",
-              "&:hover": {
-                bgcolor: "success.dark",
-              },
-              "&:disabled": {
-                bgcolor: "darkorchid",
-                color: "white",
-              },
+              bgcolor: "#28a745",
+              "&:hover": { bgcolor: "#218838" },
+              "&:disabled": { bgcolor: "#d3d3d3", color: "#777" },
+              borderRadius: "8px",
+              fontWeight: 600,
             }}
             onClick={submitHandler}
           >
             Create Group
           </Button>
         </Stack>
-      </Stack>
+      </Box>
     </Dialog>
   );
 };
