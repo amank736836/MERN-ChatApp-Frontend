@@ -6,7 +6,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { sampleUsers } from "../constants/sampleData";
 import UserItem from "../components/shared/UserItem";
 import { useInputValidation } from "6pp";
@@ -18,7 +18,6 @@ const NewGroup = ({ close }) => {
   const [members, setMembers] = useState(sampleUsers);
   const [selectedMembers, setSelectedMembers] = useState([]);
 
-
   const selectMemberHandler = (userId) => {
     if (!userId) return;
     setSelectedMembers((prev) =>
@@ -28,12 +27,19 @@ const NewGroup = ({ close }) => {
     );
     setMembers((prev) =>
       prev.map((user) =>
-        user._id === userId ? { ...user, isSelected: !user.selected } : user
+        user._id === userId ? { ...user, isAdded: !user.isAdded } : user
       )
     );
   };
 
   const submitHandler = () => {};
+
+  useEffect(() => {
+    setMembers((prev) => prev.map((user) => ({ ...user, isAdded: false })));
+    setSelectedMembers([]);
+  }, []);
+
+  console.log(members);
 
   return (
     <Dialog open onClose={close}>
