@@ -52,6 +52,46 @@ export const sampleUsers = [
     name: "Jane Smith",
     avatar: "https://via.placeholder.com/150",
   },
+  {
+    _id: "3",
+    name: "Alice Johnson",
+    avatar: "https://www.w3schools.com/howto/img_avatar.png",
+  },
+  {
+    _id: "4",
+    name: "Bob Brown",
+    avatar: "https://via.placeholder.com/150",
+  },
+  {
+    _id: "5",
+    name: "Charlie Davis",
+    avatar: "https://www.w3schools.com/howto/img_avatar.png",
+  },
+  {
+    _id: "6",
+    name: "David Wilson",
+    avatar: "https://via.placeholder.com/150",
+  },
+  {
+    _id: "7",
+    name: "Eve Adams",
+    avatar: "https://www.w3schools.com/howto/img_avatar.png",
+  },
+  {
+    _id: "8",
+    name: "Frank Harris",
+    avatar: "https://via.placeholder.com/150",
+  },
+  {
+    _id: "9",
+    name: "Grace Lee",
+    avatar: "https://www.w3schools.com/howto/img_avatar.png",
+  },
+  {
+    _id: "10",
+    name: "Henry Walker",
+    avatar: "https://via.placeholder.com/150",
+  },
 ];
 
 export const sampleNotifications = [
