@@ -20,14 +20,19 @@ const AppLayout = () => (WrappedComponent) => {
 
     return (
       <>
-        <Title title="Chatu App" description="This is the chat App" />
+        <Title title="Chat App" description="This is the chat App" />
         <Header />
         <Grid container height={"calc(100vh - 4rem)"}>
           <Grid
             size={{ sm: 4, md: 3 }}
-            sx={{ display: { xs: "none", sm: "block" } }}
+            sx={{
+              display: {
+                xs: "none",
+                sm: "block",
+              },
+              background: "linear-gradient(to bottom, #4facfe, #00f2fe)",
+            }}
             height={"100%"}
-            bgcolor="primary.main"
           >
             <ChatList
               chats={sampleChats}
@@ -48,8 +53,8 @@ const AppLayout = () => (WrappedComponent) => {
             size={{ md: 4, lg: 3 }}
             sx={{
               display: { xs: "none", md: "block" },
-              padding: "2rem",
-              bgcolor: "rgba(0, 0, 0, 0.85)",
+              // padding: "2rem",
+              // bgcolor: "rgba(0, 0, 0, 0.85)",
             }}
             height={"100%"}
           >
