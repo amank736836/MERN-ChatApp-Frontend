@@ -70,6 +70,13 @@ const Header = () => {
             <Typography
               variant="h6"
               sx={{ display: { xs: "none", sm: "block" } }}
+              onClick={() => {
+                navigate("/");
+                setIsMobile(false);
+                setIsSearch(false);
+                setIsNewGroup(false);
+                setIsNotification(false);
+              }}
             >
               Chat App
             </Typography>
