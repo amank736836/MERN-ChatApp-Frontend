@@ -16,15 +16,20 @@ const ChatList = ({
   handleDeleteChat,
 }) => {
   return (
-    <Stack width={w} direction={"column"}>
+    <Stack
+      height={"100%"}
+      width={w}
+      direction={"column"}
+      spacing={2}
+      sx={{
+        p: 2,
+        background: "linear-gradient(to bottom, #4facfe, #00f2fe)",
+        borderRadius: "12px",
+        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+      }}
+    >
       {chats.map((data, index) => {
-        const {
-          _id,
-          avatar,
-          name,
-          groupChat,
-          members = [],
-        } = data;
+        const { _id, avatar, name, groupChat, members = [] } = data;
 
         const newMessageAlert = newMessagesAlert.find(
           ({ chatId }) => chatId === _id
