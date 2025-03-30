@@ -10,7 +10,7 @@ const ChatItem = ({
   groupChat = false,
   sameSender = false,
   isOnline = false,
-  newMessageAlert = 0,
+  newMessageAlert = 2,
   index = 0,
   handleDeleteChat,
 }) => {
@@ -18,6 +18,8 @@ const ChatItem = ({
     <StyledLink
       sx={{
         padding: "0",
+        backgroundColor: "rgba(255, 255, 255, 0.9)",
+        boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
       }}
       to={`/chat/${_id}`}
       onContextMenu={(e) => handleDeleteChat(e, _id, groupChat)}
@@ -31,6 +33,7 @@ const ChatItem = ({
           backgroundColor: sameSender ? "black" : "unset",
           color: sameSender ? "white" : "unset",
           position: "relative",
+          borderRadius: "12px",
         }}
       >
         <AvatarCard avatar={avatar} />
