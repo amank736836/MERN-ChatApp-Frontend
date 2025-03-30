@@ -2,7 +2,14 @@ import { Grid, Skeleton, Stack } from "@mui/material";
 
 export const LayoutLoader = () => {
   return (
-    <Grid container height={"calc(100vh - 4rem)"} spacing={"1rem"}>
+    <Grid
+      container
+      height={"calc(100vh - 6rem)"}
+      spacing={"1rem"}
+      sx={{
+        padding: "1rem",
+      }}
+    >
       <Grid
         size={{ sm: 4, md: 3 }}
         sx={{ display: { xs: "none", sm: "block" } }}
