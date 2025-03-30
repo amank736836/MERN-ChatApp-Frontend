@@ -1,8 +1,11 @@
+import { Dialog } from '@mui/material'
 import React from 'react'
 
 const Notifications = () => {
   return (
-    <div>Notifications</div>
+    <Dialog>
+      
+    </Dialog>
   )
 }
 
