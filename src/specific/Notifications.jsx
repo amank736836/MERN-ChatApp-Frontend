@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import React, { memo } from "react";
 import { sampleNotifications } from "../constants/sampleData";
+import { transformImageUrl } from "../lib/features";
 
 const Notifications = ({ close }) => {
   const friendRequestHandler = ({ _id, accept }) => {};
@@ -68,7 +69,7 @@ const NotificationItem = memo(({ sender, _id, handler }) => {
         mb: "0.5rem",
       }}
     >
-      <Avatar src={avatar} sx={{ width: 50, height: 50 }} />
+      <Avatar src={transformImageUrl(avatar)} sx={{ width: 50, height: 50 }} />
 
       <Typography
         variant="body1"
