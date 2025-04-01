@@ -2,7 +2,6 @@ import {
   Add as AddIcon,
   Group as GroupIcon,
   Logout as LogoutIcon,
-  Menu as MenuIcon,
   Notifications as NotificationsIcon,
   Search as SearchIcon,
 } from "@mui/icons-material";
@@ -17,7 +16,7 @@ import {
 } from "@mui/material";
 import React, { lazy, Suspense, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { orange } from "../../constants/color";
+
 const SearchDialog = lazy(() => import("../../specific/Search"));
 const NotificationsDialog = lazy(() => import("../../specific/Notifications"));
 const NewGroupDialog = lazy(() => import("../../specific/NewGroup"));
@@ -25,117 +24,98 @@ const NewGroupDialog = lazy(() => import("../../specific/NewGroup"));
 const Header = () => {
   const navigate = useNavigate();
 
-  const [isMobile, setIsMobile] = useState(false);
   const [isSearch, setIsSearch] = useState(false);
   const [isNewGroup, setIsNewGroup] = useState(false);
   const [isNotification, setIsNotification] = useState(false);
 
-  const handleMobile = () => {
-    setIsMobile((prev) => !prev);
-    setIsSearch(false);
-    setIsNewGroup(false);
-    setIsNotification(false);
-  };
-
-  const openSearch = () => {
+  const toggleSearch = () => {
     setIsSearch((prev) => !prev);
     setIsNewGroup(false);
     setIsNotification(false);
-    setIsMobile(false);
   };
 
-  const openNewGroup = () => {
+  const toggleNewGroup = () => {
     setIsNewGroup((prev) => !prev);
     setIsSearch(false);
     setIsNotification(false);
-    setIsMobile(false);
   };
 
-  const openNotification = () => {
+  const toggleNotification = () => {
     setIsNotification((prev) => !prev);
     setIsSearch(false);
     setIsNewGroup(false);
-    setIsMobile(false);
   };
-
-  const navigateToGroup = () => navigate("/groups");
-
-  const logoutHandler = () => {};
 
   return (
     <>
-      <Box sx={{ flexGrow: 1 }} height={"4rem"}>
-        <AppBar position="static" sx={{ bgcolor: orange }}>
-          <Toolbar>
-            <Typography
-              variant="h6"
-              sx={{ display: { xs: "none", sm: "block" } }}
-              onClick={() => {
-                navigate("/");
-                setIsMobile(false);
-                setIsSearch(false);
-                setIsNewGroup(false);
-                setIsNotification(false);
-              }}
-            >
-              Chat App
-            </Typography>
+      <AppBar
+        position="static"
+        sx={{
+          bgcolor:"#4facfe",
+          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
+          paddingX: "1rem",
+        }}
+      >
+        <Toolbar>
+          <Typography
+            variant="h6"
+            sx={{
+              display: { xs: "none", sm: "block" },
+              fontWeight: 600,
+              cursor: "pointer",
+              transition: "color 0.3s",
+              "&:hover": { color: "#FFDA79" },
+            }}
+            onClick={() => navigate("/")}
+          >
+            Chat App
+          </Typography>
 
-            <Box sx={{ display: { xs: "block", sm: "none" } }}>
-              <IconButton color="inherit" onClick={handleMobile}>
-                <MenuIcon />
-              </IconButton>
-            </Box>
-            <Box sx={{ flexGrow: 1 }} />
-            <Box>
-              <IconBtn
-                title={"Search"}
-                onClick={openSearch}
-                icon={<SearchIcon />}
-              />
-              <IconBtn
-                title={"New Group"}
-                onClick={openNewGroup}
-                icon={<AddIcon />}
-              />
+          <Box sx={{ flexGrow: 1 }} />
 
-              <IconBtn
-                title={"Notifications"}
-                onClick={openNotification}
-                icon={<NotificationsIcon />}
-              />
+          {/* Icons Section */}
+          <Box display="flex" gap={1}>
+            <IconBtn
+              title="Search"
+              onClick={toggleSearch}
+              icon={<SearchIcon />}
+            />
+            <IconBtn
+              title="New Group"
+              onClick={toggleNewGroup}
+              icon={<AddIcon />}
+            />
+            <IconBtn
+              title="Notifications"
+              onClick={toggleNotification}
+              icon={<NotificationsIcon />}
+            />
+            <IconBtn
+              title="Manage Groups"
+              onClick={() => navigate("/groups")}
+              icon={<GroupIcon />}
+            />
+            <IconBtn title="Logout" onClick={() => {}} icon={<LogoutIcon />} />
+          </Box>
+        </Toolbar>
+      </AppBar>
 
-              <IconBtn
-                title={"Manage Groups"}
-                onClick={navigateToGroup}
-                icon={<GroupIcon />}
-              />
-
-              <IconBtn
-                title={"Logout"}
-                icon={<LogoutIcon />}
-                onClick={logoutHandler}
-              />
-            </Box>
-          </Toolbar>
-        </AppBar>
-      </Box>
-
+      {/* Dialogs */}
       {isSearch && (
         <Suspense fallback={<Backdrop open={true} />}>
-          <SearchDialog close={openSearch} />
+          <SearchDialog close={toggleSearch} />
         </Suspense>
       )}
 
       {isNewGroup && (
         <Suspense fallback={<Backdrop open={true} />}>
-          <NewGroupDialog close={openNewGroup} />
+          <NewGroupDialog close={toggleNewGroup} />
         </Suspense>
       )}
 
       {isNotification && (
         <Suspense fallback={<Backdrop open={true} />}>
-          <NotificationsDialog close={openNotification} />
+          <NotificationsDialog close={toggleNotification} />
         </Suspense>
       )}
     </>
@@ -145,7 +125,18 @@ const Header = () => {
 const IconBtn = ({ title, onClick, icon }) => {
   return (
     <Tooltip title={title} arrow>
-      <IconButton color="inherit" onClick={onClick} size="large">
+      <IconButton
+        color="inherit"
+        onClick={onClick}
+        size="large"
+        sx={{
+          transition: "transform 0.2s, background-color 0.3s",
+          "&:hover": {
+            transform: "scale(1.1)",
+            backgroundColor: "rgba(255, 255, 255, 0.2)",
+          },
+        }}
+      >
         {icon}
       </IconButton>
     </Tooltip>
