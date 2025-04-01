@@ -1,3 +1,5 @@
+import { useFileHandler, useInputValidation, useStrongPassword } from "6pp";
+import { CameraAlt as CameraAltIcon } from "@mui/icons-material";
 import {
   Avatar,
   Button,
@@ -8,10 +10,8 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { CameraAlt as CameraAltIcon } from "@mui/icons-material";
 import React, { useState } from "react";
 import { VisuallyHiddenInput } from "../components/styles/StyledComponents";
-import { useFileHandler, useInputValidation, useStrongPassword } from "6pp";
 import { usernameValidator } from "../utils/validators";
 
 const Login = () => {
@@ -134,6 +134,7 @@ const Login = () => {
                   <Avatar
                     sx={{ width: "8rem", height: "8rem" }}
                     src={avatar.preview}
+                    alt="Avatar"
                   />
                   <IconButton
                     sx={{
