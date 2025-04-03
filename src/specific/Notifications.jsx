@@ -7,6 +7,7 @@ import {
   Stack,
   Typography,
   Box,
+  List,
 } from "@mui/material";
 import React, { memo } from "react";
 import { sampleNotifications } from "../constants/sampleData";
@@ -21,9 +22,12 @@ const Notifications = ({ close }) => {
         sx={{
           p: "2rem",
           width: "28rem",
-          borderRadius: "12px",
           background: "linear-gradient(135deg, #eef2f3, #8e9eab)",
           boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+          "&::-webkit-scrollbar": {
+            display: "none",
+          },
+          overflow: "auto",
         }}
       >
         <DialogTitle
@@ -35,20 +39,34 @@ const Notifications = ({ close }) => {
           Notifications
         </DialogTitle>
 
-        {sampleNotifications.length > 0 ? (
-          sampleNotifications.map((notification) => (
-            <NotificationItem
-              sender={notification.sender}
-              _id={notification._id}
-              handler={friendRequestHandler}
-              key={notification._id}
-            />
-          ))
-        ) : (
-          <Typography textAlign="center" color="gray">
-            No Notifications yet
-          </Typography>
-        )}
+        <List
+          sx={{
+            maxHeight: "300px",
+            overflowY: "auto",
+            borderRadius: "8px",
+            backgroundColor: "white",
+            p: "0.5rem",
+            boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.1)",
+            "&::-webkit-scrollbar": {
+              display: "none",
+            },
+          }}
+        >
+          {sampleNotifications.length > 0 ? (
+            sampleNotifications.map((notification) => (
+              <NotificationItem
+                sender={notification.sender}
+                _id={notification._id}
+                handler={friendRequestHandler}
+                key={notification._id}
+              />
+            ))
+          ) : (
+            <Typography textAlign="center" color="gray">
+              No Notifications yet
+            </Typography>
+          )}
+        </List>
       </Box>
     </Dialog>
   );
