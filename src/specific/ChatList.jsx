@@ -26,7 +26,11 @@ const ChatList = ({
         background: "linear-gradient(to bottom, #4facfe, #00f2fe)",
         borderRadius: "12px",
         boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+        "&::-webkit-scrollbar": {
+          display: "none",
+        },
       }}
+      overflow={"auto"}
     >
       {chats.map((data, index) => {
         const { _id, avatar, name, groupChat, members = [] } = data;
