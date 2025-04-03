@@ -22,7 +22,9 @@ import React, { lazy, memo, Suspense, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import AvatarCard from "../components/shared/AvatarCard";
 import { StyledLink } from "../components/styles/StyledComponents";
-import { sampleChats } from "../constants/sampleData";
+import { sampleChats, sampleUsers } from "../constants/sampleData";
+import UserItem from "../components/shared/UserItem";
+import { gradientBg } from "../constants/color";
 
 const ConfirmDeleteDialog = lazy(() =>
   import("../components/dialog/ConfirmDeleteDialog")
@@ -32,29 +34,32 @@ const AddMemberDialog = lazy(() =>
   import("../components/dialog/AddMemberDialog")
 );
 
-const isAddMember = true;
-
-const gradientBg = "linear-gradient(to bottom, #4facfe, #00f2fe)";
+const isAddMember = false;
 
 const Groups = () => {
   const chatId = useSearchParams()[0].get("group");
 
   const navigate = useNavigate();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navigateBack = () => navigate("/");
 
   const [groupName, setGroupName] = useState("Group Name");
 
   const [groupNameUpdatedValue, setGroupNameUpdatedValue] = useState();
 
-  const [confirmDeleteDialog, setConfirmDeleteDialog] = useState(false);
+  const updateGroupName = () => {
+    setGroupName(groupName);
+    setIsEdit(false);
+  };
 
   const [isEdit, setIsEdit] = useState(false);
 
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   const handleMobile = () => setIsMobileMenuOpen((prev) => !prev);
 
-  const navigateBack = () => navigate("/");
-
   const handleMobileClose = () => setIsMobileMenuOpen(false);
+
+  const [confirmDeleteDialog, setConfirmDeleteDialog] = useState(false);
 
   const openConfirmDeleteHandler = (e) => {
     setConfirmDeleteDialog(true);
@@ -69,18 +74,17 @@ const Groups = () => {
     console.log("Add member to group", chatId);
   };
 
-  const updateGroupName = () => {
-    setGroupName(groupName);
-    setIsEdit(false);
-  };
-
   const deleteHandler = () => {
     closeConfirmDeleteHandler();
   };
 
+  const removeMemberHandler = (userId) => {};
+
   useEffect(() => {
-    setGroupName("Group Name");
-    setGroupNameUpdatedValue("Group Name");
+    if (chatId) {
+      setGroupName("Group Name " + chatId);
+      setGroupNameUpdatedValue("Group Name" + chatId);
+    }
 
     return () => {
       setGroupName("");
@@ -199,7 +203,14 @@ const Groups = () => {
           background: gradientBg,
           boxShadow: "2px 0 10px rgba(0,0,0,0.1)",
           padding: "1rem",
+          "&::-webkit-scrollbar": {
+            display: "none",
+          },
         }}
+        width={"100%"}
+        height={"100%"}
+        position={"relative"}
+        overflow={"auto"}
       >
         <GroupsList myGroups={sampleChats} chatId={chatId} />
       </Grid>
@@ -239,10 +250,30 @@ const Groups = () => {
                 md: "1rem 4rem",
               }}
               spacing={"2rem"}
-              bgcolor={"bisque"}
+              bgcolor={gradientBg}
               height={"50vh"}
               overflow={"auto"}
-            ></Stack>
+              sx={{
+                "&::-webkit-scrollbar": {
+                  display: "none",
+                },
+              }}
+            >
+              {sampleUsers.map((user) => (
+                <UserItem
+                  user={user}
+                  key={user._id}
+                  isAdded
+                  styling={{
+                    boxShadow: "0 0 0.5rem rgba(0, 0, 0, 0.2)",
+                    padding: "1rem 2rem",
+                    borderRadius: "1rem",
+                    bgcolor: "rgba(25, 25, 25, 0.5)",
+                  }}
+                  handler={removeMemberHandler}
+                />
+              ))}
+            </Stack>
 
             {ButtonGroup}
           </>
@@ -285,7 +316,7 @@ const Groups = () => {
 };
 
 const GroupsList = ({ w = "100%", myGroups = [], chatId }) => (
-  <Stack sx={{ padding: "1rem" }} width={w}>
+  <Stack sx={{ padding: "0.5rem" }} width={w} height={"100%"}>
     {myGroups.length > 0 ? (
       myGroups.map((group) => (
         <GroupListItem group={group} key={group._id} chatId={chatId} />
@@ -313,6 +344,7 @@ const GroupListItem = memo(({ group, chatId }) => {
         alignItems="center"
         spacing={2}
         sx={{
+          marginLeft: "0.5rem",
           padding: "0.75rem",
           borderRadius: "0.75rem",
           backgroundColor: "rgba(255, 255, 255, 0.2)",
