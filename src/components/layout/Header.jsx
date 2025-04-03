@@ -4,6 +4,7 @@ import {
   Logout as LogoutIcon,
   Notifications as NotificationsIcon,
   Search as SearchIcon,
+  Menu as MenuIcon,
 } from "@mui/icons-material";
 import {
   AppBar,
@@ -24,9 +25,17 @@ const NewGroupDialog = lazy(() => import("../../specific/NewGroup"));
 const Header = () => {
   const navigate = useNavigate();
 
+  const [isMobile, setIsMobile] = useState(false);
   const [isSearch, setIsSearch] = useState(false);
   const [isNewGroup, setIsNewGroup] = useState(false);
   const [isNotification, setIsNotification] = useState(false);
+
+  const handleMobile = () => {
+    setIsMobile((prev) => !prev);
+    setIsSearch(false);
+    setIsNewGroup(false);
+    setIsNotification(false);
+  };
 
   const toggleSearch = () => {
     setIsSearch((prev) => !prev);
@@ -51,7 +60,7 @@ const Header = () => {
       <AppBar
         position="static"
         sx={{
-          bgcolor:"#4facfe",
+          bgcolor: "#4facfe",
           boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
           paddingX: "1rem",
         }}
@@ -70,6 +79,12 @@ const Header = () => {
           >
             Chat App
           </Typography>
+
+          <Box sx={{ display: { xs: "block", sm: "none" } }}>
+            <IconButton color="inherit" onClick={handleMobile}>
+              <MenuIcon />
+            </IconButton>
+          </Box>
 
           <Box sx={{ flexGrow: 1 }} />
 
