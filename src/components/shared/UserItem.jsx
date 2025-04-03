@@ -7,6 +7,7 @@ const UserItem = ({
   handler,
   handlerIsLoading = null,
   isAdded = false,
+  styling = {},
 }) => {
   const { _id, name, avatar } = user;
 
@@ -19,6 +20,7 @@ const UserItem = ({
         alignItems={"center"}
         spacing={"1rem"}
         width={"100%"}
+        {...styling}
       >
         <Avatar />
         <Typography
