@@ -78,6 +78,11 @@ const NewGroup = ({ close }) => {
             borderRadius: "8px",
             backgroundColor: "white",
             p: "0.5rem",
+            mt: "1rem",
+            "&::-webkit-scrollbar": {
+              display: "none",
+            },
+
           }}
         >
           {members.map((user) => (
