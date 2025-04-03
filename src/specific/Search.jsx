@@ -40,7 +40,6 @@ const Search = ({ close }) => {
         sx={{
           p: "2rem",
           width: "28rem",
-          borderRadius: "12px",
           background: "linear-gradient(135deg, #eef2f3, #8e9eab)",
         }}
       >
@@ -83,6 +82,9 @@ const Search = ({ close }) => {
             backgroundColor: "white",
             p: "0.5rem",
             boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.1)",
+            "&::-webkit-scrollbar": {
+              display: "none",
+            },
           }}
         >
           {users.map((user) => (
