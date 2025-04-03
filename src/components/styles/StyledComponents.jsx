@@ -17,7 +17,7 @@ export const VisuallyHiddenInput = styled("input")({
 export const StyledLink = styled(LinkComponent)`
   text-decoration: none;
   color: #333;
-  padding: 1rem;
+  padding: 0.5rem;
   font-weight: bold;
   border-radius: 8px;
   transition: all 0.3s ease-in-out;
