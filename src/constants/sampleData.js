@@ -39,6 +39,138 @@ export const sampleChats = [
     groupChat: true,
     members: ["1", "2"],
   },
+  {
+    avatar: [
+      "https://www.w3schools.com/howto/img_avatar.png",
+      "https://www.w3schools.com/howto/img_avatar.png",
+      "https://www.w3schools.com/howto/img_avatar.png",
+    ],
+    name: "Alice Johnson",
+    _id: "4",
+    groupChat: true,
+    members: ["1", "2"],
+  },
+  {
+    avatar: [
+      "https://www.w3schools.com/howto/img_avatar.png",
+      "https://www.w3schools.com/howto/img_avatar.png",
+      "https://www.w3schools.com/howto/img_avatar.png",
+    ],
+    name: "Bob Brown",
+    _id: "5",
+    groupChat: true,
+    members: ["1", "2"],
+  },
+  {
+    avatar: [
+      "https://www.w3schools.com/howto/img_avatar.png",
+      "https://www.w3schools.com/howto/img_avatar.png",
+      "https://www.w3schools.com/howto/img_avatar.png",
+    ],
+    name: "Charlie Davis",
+    _id: "6",
+    groupChat: true,
+    members: ["1", "2"],
+  },
+  {
+    avatar: [
+      "https://www.w3schools.com/howto/img_avatar.png",
+      "https://www.w3schools.com/howto/img_avatar.png",
+      "https://www.w3schools.com/howto/img_avatar.png",
+    ],
+    name: "David Wilson",
+    _id: "7",
+    groupChat: true,
+    members: ["1", "2"],
+  },
+  {
+    avatar: [
+      "https://www.w3schools.com/howto/img_avatar.png",
+      "https://www.w3schools.com/howto/img_avatar.png",
+      "https://www.w3schools.com/howto/img_avatar.png",
+    ],
+    name: "Eve Adams",
+    _id: "8",
+    groupChat: true,
+    members: ["1", "2"],
+  },
+  {
+    avatar: [
+      "https://www.w3schools.com/howto/img_avatar.png",
+      "https://www.w3schools.com/howto/img_avatar.png",
+      "https://www.w3schools.com/howto/img_avatar.png",
+    ],
+    name: "Frank Harris",
+    _id: "9",
+    groupChat: true,
+    members: ["1", "2"],
+  },
+  {
+    avatar: [
+      "https://www.w3schools.com/howto/img_avatar.png",
+      "https://www.w3schools.com/howto/img_avatar.png",
+      "https://www.w3schools.com/howto/img_avatar.png",
+    ],
+    name: "Grace Lee",
+    _id: "10",
+    groupChat: true,
+    members: ["1", "2"],
+  },
+  {
+    avatar: [
+      "https://www.w3schools.com/howto/img_avatar.png",
+      "https://www.w3schools.com/howto/img_avatar.png",
+      "https://www.w3schools.com/howto/img_avatar.png",
+    ],
+    name: "Henry Walker",
+    _id: "11",
+    groupChat: true,
+    members: ["1", "2"],
+  },
+  {
+    avatar: [
+      "https://www.w3schools.com/howto/img_avatar.png",
+      "https://www.w3schools.com/howto/img_avatar.png",
+      "https://www.w3schools.com/howto/img_avatar.png",
+    ],
+    name: "Ivy Young",
+    _id: "12",
+    groupChat: true,
+    members: ["1", "2"],
+  },
+  {
+    avatar: [
+      "https://www.w3schools.com/howto/img_avatar.png",
+      "https://www.w3schools.com/howto/img_avatar.png",
+      "https://www.w3schools.com/howto/img_avatar.png",
+    ],
+    name: "Jack King",
+    _id: "13",
+    groupChat: true,
+    members: ["1", "2"],
+  },
+  {
+    avatar: [
+      "https://www.w3schools.com/howto/img_avatar.png",
+      "https://www.w3schools.com/howto/img_avatar.png",
+      "https://www.w3schools.com/howto/img_avatar.png",
+    ],
+    name: "Kathy Scott",
+    _id: "14",
+    groupChat: true,
+    members: ["1", "2"],
+  },
+  {
+    avatar: [
+      "https://www.w3schools.com/howto/img_avatar.png",
+      "https://www.w3schools.com/howto/img_avatar.png",
+      "https://www.w3schools.com/howto/img_avatar.png",
+    ],
+    name: "Liam Green",
+    _id: "15",
+    groupChat: true,
+    members: ["1", "2"],
+  },
 ];
 
 export const sampleUsers = [
@@ -154,6 +286,76 @@ export const sampleNotifications = [
       avatar: "https://www.w3schools.com/howto/img_avatar.png",
     },
     _id: "5",
+  },
+  {
+    sender: {
+      name: "David Wilson",
+      avatar: "https://via.placeholder.com/150",
+    },
+    _id: "6",
+  },
+  {
+    sender: {
+      name: "Eve Adams",
+      avatar: "https://www.w3schools.com/howto/img_avatar.png",
+    },
+    _id: "7",
+  },
+  {
+    sender: {
+      name: "Frank Harris",
+      avatar: "https://via.placeholder.com/150",
+    },
+    _id: "8",
+  },
+  {
+    sender: {
+      name: "Grace Lee",
+      avatar: "https://www.w3schools.com/howto/img_avatar.png",
+    },
+    _id: "9",
+  },
+  {
+    sender: {
+      name: "Henry Walker",
+      avatar: "https://via.placeholder.com/150",
+    },
+    _id: "10",
+  },
+  {
+    sender: {
+      name: "Ivy Young",
+      avatar: "https://www.w3schools.com/howto/img_avatar.png",
+    },
+    _id: "11",
+  },
+  {
+    sender: {
+      name: "Jack King",
+      avatar: "https://via.placeholder.com/150",
+    },
+    _id: "12",
+  },
+  {
+    sender: {
+      name: "Kathy Scott",
+      avatar: "https://www.w3schools.com/howto/img_avatar.png",
+    },
+    _id: "13",
+  },
+  {
+    sender: {
+      name: "Liam Green",
+      avatar: "https://via.placeholder.com/150",
+    },
+    _id: "14",
+  },
+  {
+    sender: {
+      name: "Mia Turner",
+      avatar: "https://www.w3schools.com/howto/img_avatar.png",
+    },
+    _id: "15",
   },
 ];
 
