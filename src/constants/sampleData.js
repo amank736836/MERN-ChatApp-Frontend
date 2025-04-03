@@ -92,6 +92,31 @@ export const sampleUsers = [
     name: "Henry Walker",
     avatar: "https://via.placeholder.com/150",
   },
+  {
+    _id: "11",
+    name: "Ivy Young",
+    avatar: "https://www.w3schools.com/howto/img_avatar.png",
+  },
+  {
+    _id: "12",
+    name: "Jack King",
+    avatar: "https://via.placeholder.com/150",
+  },
+  {
+    _id: "13",
+    name: "Kathy Scott",
+    avatar: "https://www.w3schools.com/howto/img_avatar.png",
+  },
+  {
+    _id: "14",
+    name: "Liam Green",
+    avatar: "https://via.placeholder.com/150",
+  },
+  {
+    _id: "15",
+    name: "Mia Turner",
+    avatar: "https://www.w3schools.com/howto/img_avatar.png",
+  },
 ];
 
 export const sampleNotifications = [
