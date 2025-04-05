@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { sampleChats } from "../../constants/sampleData";
 import Title from "../shared/Title";
 import Header from "./Header";
+import { gradientBg } from "../../constants/color";
 
 const ChatList = lazy(() => import("../../specific/ChatList"));
 const Profile = lazy(() => import("../../specific/Profile"));
@@ -30,7 +31,7 @@ const AppLayout = () => (WrappedComponent) => {
                 xs: "none",
                 sm: "block",
               },
-              background: "linear-gradient(to bottom, #4facfe, #00f2fe)",
+              background: gradientBg,
             }}
             height={"100%"}
           >
@@ -42,10 +43,7 @@ const AppLayout = () => (WrappedComponent) => {
               handleDeleteChat={handleDeleteChat}
             />
           </Grid>
-          <Grid
-            size={{ sm: 8, md: 5, lg: 6, xs: 12 }}
-            height={"100%"}
-          >
+          <Grid size={{ sm: 8, md: 5, lg: 6, xs: 12 }} height={"100%"}>
             <WrappedComponent {...props} />
           </Grid>
           <Grid
