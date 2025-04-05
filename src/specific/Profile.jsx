@@ -6,6 +6,7 @@ import {
 import { Avatar, Box, Stack, Typography } from "@mui/material";
 import moment from "moment";
 import React from "react";
+import { gradientBg } from "../constants/color";
 
 const Profile = () => {
   return (
@@ -15,7 +16,7 @@ const Profile = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "linear-gradient(to bottom, #4facfe, #00f2fe)",
+        background: gradientBg,
         padding: "2rem",
       }}
     >
