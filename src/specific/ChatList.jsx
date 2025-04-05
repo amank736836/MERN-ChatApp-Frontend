@@ -1,6 +1,7 @@
 import { Stack } from "@mui/material";
 import React from "react";
 import ChatItem from "../components/shared/ChatItem";
+import { gradientBg } from "../constants/color";
 
 const ChatList = ({
   w = "100%",
@@ -23,8 +24,7 @@ const ChatList = ({
       spacing={2}
       sx={{
         p: 2,
-        background: "linear-gradient(to bottom, #4facfe, #00f2fe)",
-        borderRadius: "12px",
+        background: gradientBg,
         boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
         "&::-webkit-scrollbar": {
           display: "none",
