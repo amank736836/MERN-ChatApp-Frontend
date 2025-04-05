@@ -21,10 +21,10 @@ import {
 import React, { lazy, memo, Suspense, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import AvatarCard from "../components/shared/AvatarCard";
-import { StyledLink } from "../components/styles/StyledComponents";
-import { sampleChats, sampleUsers } from "../constants/sampleData";
 import UserItem from "../components/shared/UserItem";
+import { StyledLink } from "../components/styles/StyledComponents";
 import { gradientBg } from "../constants/color";
+import { sampleChats, sampleUsers } from "../constants/sampleData";
 
 const ConfirmDeleteDialog = lazy(() =>
   import("../components/dialog/ConfirmDeleteDialog")
