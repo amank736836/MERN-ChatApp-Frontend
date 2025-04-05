@@ -5,6 +5,7 @@ import {
   Notifications as NotificationsIcon,
   Search as SearchIcon,
   Menu as MenuIcon,
+  Close as CloseIcon,
 } from "@mui/icons-material";
 import {
   AppBar,
@@ -82,7 +83,7 @@ const Header = () => {
 
           <Box sx={{ display: { xs: "block", sm: "none" } }}>
             <IconButton color="inherit" onClick={handleMobile}>
-              <MenuIcon />
+              {isMobile ? <CloseIcon /> : <MenuIcon />}
             </IconButton>
           </Box>
 
