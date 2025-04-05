@@ -1,6 +1,7 @@
 import React from "react";
 import AppLayout from "../components/layout/AppLayout";
 import { Stack, Typography, Box } from "@mui/material";
+import { gradientBg } from "../constants/color";
 
 const Home = () => {
   return (
@@ -10,7 +11,7 @@ const Home = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "linear-gradient(to bottom, #4facfe, #00f2fe)",
+        background: gradientBg,
         padding: "1rem",
       }}
     >
