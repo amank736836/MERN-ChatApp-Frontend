@@ -12,6 +12,7 @@ import React, { useEffect, useState } from "react";
 import UserItem from "../components/shared/UserItem";
 import { sampleUsers } from "../constants/sampleData";
 import { usernameValidator } from "../utils/validators";
+import { dialogBg } from "../constants/color";
 
 const NewGroup = ({ close }) => {
   const groupName = useInputValidation("", usernameValidator);
@@ -47,7 +48,7 @@ const NewGroup = ({ close }) => {
           p: { xs: "1.5rem", sm: "3rem" },
           width: "30rem",
           borderRadius: "12px",
-          background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
+          background: dialogBg,
         }}
       >
         <DialogTitle textAlign="center" variant="h4" fontWeight={600}>
@@ -82,7 +83,6 @@ const NewGroup = ({ close }) => {
             "&::-webkit-scrollbar": {
               display: "none",
             },
-
           }}
         >
           {members.map((user) => (
