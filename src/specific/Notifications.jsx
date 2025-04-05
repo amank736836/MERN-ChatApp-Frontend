@@ -12,6 +12,7 @@ import {
 import React, { memo } from "react";
 import { sampleNotifications } from "../constants/sampleData";
 import { transformImageUrl } from "../lib/features";
+import { dialogBg } from "../constants/color";
 
 const Notifications = ({ close }) => {
   const friendRequestHandler = ({ _id, accept }) => {};
@@ -22,7 +23,7 @@ const Notifications = ({ close }) => {
         sx={{
           p: "2rem",
           width: "28rem",
-          background: "linear-gradient(135deg, #eef2f3, #8e9eab)",
+          background: dialogBg,
           boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
           "&::-webkit-scrollbar": {
             display: "none",
