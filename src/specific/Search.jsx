@@ -12,6 +12,7 @@ import {
 import React, { useState } from "react";
 import UserItem from "../components/shared/UserItem";
 import { sampleUsers } from "../constants/sampleData";
+import { dialogBg } from "../constants/color";
 
 const Search = ({ close }) => {
   const search = useInputValidation("");
@@ -40,7 +41,7 @@ const Search = ({ close }) => {
         sx={{
           p: "2rem",
           width: "28rem",
-          background: "linear-gradient(135deg, #eef2f3, #8e9eab)",
+          background: dialogBg,
         }}
       >
         <DialogTitle
