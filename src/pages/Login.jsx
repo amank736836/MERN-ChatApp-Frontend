@@ -13,6 +13,7 @@ import {
 import React, { useState } from "react";
 import { VisuallyHiddenInput } from "../components/styles/StyledComponents";
 import { usernameValidator } from "../utils/validators";
+import { authBg } from "../constants/color";
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -37,7 +38,7 @@ const Login = () => {
   return (
     <div
       style={{
-        backgroundImage: "linear-gradient(to right, #ff7e5f, #feb47b)",
+        backgroundImage: authBg,
         backgroundSize: "cover",
         backgroundPosition: "center",
         minHeight: "100vh",
