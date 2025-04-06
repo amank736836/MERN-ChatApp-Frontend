@@ -47,16 +47,16 @@ export const SearchField = styled("input")`
   font-size: 1.1rem;
 `;
 
-export const curveButton = styled("button")`
-  borderRadius: 1.5rem,
-  padding: 1rem 2rem,
-  border: none,
-  outline: none,
-  cursor: pointer,
-  backgroundColor: ${matBlack},
-  color: white,
-  fontSize: 1.1rem,
-  &:hover: {
+export const CurveButton = styled("button")({
+  borderRadius: "1.5rem",
+  padding: "1rem 2rem",
+  border: "none",
+  outline: "none",
+  cursor: "pointer",
+  backgroundColor: matBlack,
+  color: "white",
+  fontSize: "1.1rem",
+  "&:hover": {
     backgroundColor: "rgba(0, 0, 0, 0.8)",
   },
-`;
+});
