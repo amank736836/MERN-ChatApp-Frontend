@@ -2,13 +2,14 @@ import { Avatar, AvatarGroup, Box, Stack } from "@mui/material";
 import React from "react";
 import { transformImageUrl } from "../../lib/features";
 
-const AvatarCard = ({ avatar = [], max = 4 }) => {
+const AvatarCard = ({ avatar = [], max = 3 }) => {
   return (
     <Stack direction={"row"} spacing={0.5} alignItems={"center"}>
       <AvatarGroup
         max={max}
         sx={{
           gap: "0.3rem",
+          position: "relative",
         }}
       >
         <Box width={"5rem"} height={"3rem"} display="flex" alignItems="center">
@@ -24,8 +25,8 @@ const AvatarCard = ({ avatar = [], max = 4 }) => {
                   height: "3rem",
                   position: "absolute",
                   left: {
-                    xs: `${index * 0.5}rem`,
-                    sm: `${index+0.5}rem`,
+                    xs: `${index + 0.5}rem`,
+                    sm: `${index - 0.5}rem`,
                   },
                   border: "2px solid white",
                   boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
