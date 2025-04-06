@@ -399,3 +399,95 @@ export const sampleMessages = [
     createdAt: "2023-01-01T00:00:00.000Z",
   },
 ];
+
+export const dashboardData = {
+  users: [
+    {
+      name: "John Doe",
+      avatar: "https://www.w3schools.com/howto/img_avatar.png",
+      _id: "1",
+      username: "johndoe",
+      friends: 100,
+      groups: 5,
+    },
+  ],
+  chats: [
+    {
+      name: "John Doe",
+      avatar: ["https://www.w3schools.com/howto/img_avatar.png"],
+      _id: "1",
+      groupChat: false,
+      members: [
+        {
+          _id: "1",
+          avatar: "https://www.w3schools.com/howto/img_avatar.png",
+        },
+        {
+          _id: "2",
+          avatar: "https://via.placeholder.com/150",
+        },
+      ],
+      totalMembers: 2,
+      totalMessages: 10,
+      creator: {
+        name: "Jane Smith",
+        avatar: "https://via.placeholder.com/150",
+      },
+    },
+  ],
+  messages: [
+    {
+      _id: "sdmndnsad",
+      attachments: [
+        {
+          url: "https://www.w3schools.com/howto/img_avatar.png",
+          public_id: "asd123",
+        },
+      ],
+      content: "Hello, how are you?",
+      sender: {
+        avatar: "https://www.w3schools.com/howto/img_avatar.png",
+        name: "John Doe",
+      },
+      chat: "chatId123",
+      groupChat: true,
+      createdAt: "2023-01-01T00:00:00.000Z",
+    },
+    {
+      _id: "fsadfsdas123",
+      attachments: [],
+      content: "I'm good, thanks!",
+      sender: {
+        avatar: "https://www.w3schools.com/howto/img_avatar.png",
+        name: "Jane Smith",
+      },
+      chat: "chatId123",
+      groupChat: true,
+      createdAt: "2023-01-01T00:00:00.000Z",
+    },
+    {
+      _id: "sdmndnsadsad",
+      attachments: [],
+      content: "What about you?",
+      sender: {
+        avatar: "https://www.w3schools.com/howto/img_avatar.png",
+        name: "John Doe",
+      },
+      chat: "chatId123",
+      groupChat: true,
+      createdAt: "2023-01-01T00:00:00.000Z",
+    },
+    {
+      _id: "sdmndvnsdasad",
+      attachments: [],
+      content: "Hello, how are you?",
+      sender: {
+        avatar: "https://www.w3schools.com/howto/img_avatar.png",
+        name: "John Doe",
+      },
+      chat: "chatId123",
+      groupChat: true,
+      createdAt: "2023-01-01T00:00:00.000Z",
+    },
+  ],
+};
