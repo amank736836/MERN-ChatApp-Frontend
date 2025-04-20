@@ -10,13 +10,13 @@ const columns = [
     field: "id",
     headerName: "ID",
     headerClassName: "table-header",
-    width: 150,
+    width: 75,
   },
   {
     field: "avatar",
     headerName: "Avatar",
     headerClassName: "table-header",
-    width: 150,
+    width: 75,
     renderCell: (params) => (
       <Avatar alt={params.row.name} src={params.row.avatar} />
     ),
@@ -34,16 +34,28 @@ const columns = [
     width: 150,
   },
   {
+    field: "email",
+    headerName: "Email",
+    headerClassName: "table-header",
+    width: 200,
+  },
+  {
     field: "friends",
     headerName: "Friends",
     headerClassName: "table-header",
-    width: 200,
+    width: 100,
   },
   {
     field: "groups",
     headerName: "Groups",
     headerClassName: "table-header",
-    width: 200,
+    width: 100,
+  },
+  {
+    field: "createdAt",
+    headerName: "Created At",
+    headerClassName: "table-header",
+    width: 175,
   },
 ];
 
