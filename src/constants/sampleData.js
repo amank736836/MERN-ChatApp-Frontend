@@ -409,6 +409,8 @@ export const dashboardData = {
       username: "johndoe",
       friends: 100,
       groups: 5,
+      email: "amankarguwal0@gmail.com",
+      createdAt: "2023-01-01",
     },
   ],
   chats: [
