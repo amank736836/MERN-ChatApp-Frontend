@@ -11,7 +11,7 @@ import {
 import React, { useEffect, useState } from "react";
 import UserItem from "../components/shared/UserItem";
 import { sampleUsers } from "../constants/sampleData";
-import { usernameValidator } from "../utils/validators";
+import { usernameValidator } from "../lib/validators";
 import { dialogBg } from "../constants/color";
 
 const NewGroup = ({ close }) => {
