@@ -15,7 +15,7 @@ const Groups = lazy(() => import("./pages/Groups"));
 const Login = lazy(() => import("./pages/Login"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
-let user = true;
+let user = false;
 
 function App() {
   return (
