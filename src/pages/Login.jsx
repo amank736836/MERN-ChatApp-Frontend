@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { VisuallyHiddenInput } from "../components/styles/StyledComponents";
-import { usernameValidator } from "../utils/validators";
+import { usernameValidator } from "../lib/validators";
 import { authBg } from "../constants/color";
 
 const Login = () => {
