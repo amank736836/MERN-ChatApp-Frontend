@@ -10,10 +10,16 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import axios from "axios";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { VisuallyHiddenInput } from "../components/styles/StyledComponents";
-import { usernameValidator } from "../lib/validators";
 import { authBg } from "../constants/color";
+import { server } from "../constants/config";
+import { usernameValidator } from "../lib/validators";
+import { userExists } from "../redux/reducers/auth";
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -27,12 +33,102 @@ const Login = () => {
   const confirmPassword = useStrongPassword("");
   const avatar = useFileHandler("single", 2);
 
-  const handleLogin = (e) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
     e.preventDefault();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    };
+
+    const toastId = toast.loading("Logging in...");
+
+    try {
+      await axios.post(
+        `${server}/user/login`,
+        {
+          username: username.value,
+          password: password.value,
+        },
+        config
+      );
+
+      dispatch(userExists(true));
+
+      toast.success("Login successful!", {
+        duration: 1000,
+      });
+
+      toast
+        .promise(new Promise((resolve) => resolve()), {
+          loading: "Redirecting...",
+          success: "Redirected!",
+          error: "Redirect failed",
+        })
+        .then(() => {
+          navigate("/");
+          toast.dismiss(toastId);
+        });
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Login failed", {
+        duration: 1000,
+      });
+    } finally {
+      toast.dismiss(toastId);
+    }
   };
 
-  const handleSignUp = (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
+    const formDate = new FormData();
+    formDate.append("avatar", avatar.file);
+    formDate.append("name", name.value);
+    formDate.append("username", username.value);
+    formDate.append("email", email.value);
+    formDate.append("password", password.value);
+
+    const toastId = toast.loading("Signing up...");
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true,
+      };
+
+      const response = await axios.post(
+        `${server}/user/new`,
+        formDate,
+        config
+      );
+
+      dispatch(userExists(true));
+
+      toast.success("Sign up successful!", {
+        duration: 1000,
+      });
+      toast
+        .promise(new Promise((resolve) => resolve()), {
+          loading: "Redirecting...",
+          success: "Redirected!",
+          error: "Redirect failed",
+        })
+        .then(() => {
+          toast.dismiss(toastId);
+          navigate("/");
+        });
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Sign up failed", {
+        duration: 1000,
+      });
+    } finally {
+      toast.dismiss(toastId);
+    }
   };
 
   return (
@@ -83,10 +179,10 @@ const Login = () => {
                   margin="normal"
                   variant="outlined"
                   type="text"
-                  autoComplete="username"
+                  autoComplete="username email"
                   autoFocus
-                  value={username.value || email.value}
-                  onChange={username.changeHandler || email.changeHandler}
+                  value={username.value}
+                  onChange={username.changeHandler}
                 />
                 <TextField
                   required
@@ -211,6 +307,7 @@ const Login = () => {
                   color="primary"
                   type="submit"
                   sx={{ mt: 2 }}
+                  disabled={password.value !== confirmPassword.value}
                 >
                   Sign Up
                 </Button>
