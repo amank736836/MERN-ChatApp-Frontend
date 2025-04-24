@@ -1,11 +1,11 @@
 import {
   Add as AddIcon,
+  Close as CloseIcon,
   Group as GroupIcon,
   Logout as LogoutIcon,
+  Menu as MenuIcon,
   Notifications as NotificationsIcon,
   Search as SearchIcon,
-  Menu as MenuIcon,
-  Close as CloseIcon,
 } from "@mui/icons-material";
 import {
   AppBar,
@@ -16,8 +16,14 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
+import axios from "axios";
 import React, { lazy, Suspense, useState } from "react";
+import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { server } from "../../constants/config";
+import { userNotExists } from "../../redux/reducers/auth";
+import { setIsMobile } from "../../redux/reducers/misc";
 
 const SearchDialog = lazy(() => import("../../specific/Search"));
 const NotificationsDialog = lazy(() => import("../../specific/Notifications"));
@@ -25,17 +31,16 @@ const NewGroupDialog = lazy(() => import("../../specific/NewGroup"));
 
 const Header = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const [isMobile, setIsMobile] = useState(false);
+  const { isMobile } = useSelector((state) => state.misc);
+
   const [isSearch, setIsSearch] = useState(false);
   const [isNewGroup, setIsNewGroup] = useState(false);
   const [isNotification, setIsNotification] = useState(false);
 
   const handleMobile = () => {
-    setIsMobile((prev) => !prev);
-    setIsSearch(false);
-    setIsNewGroup(false);
-    setIsNotification(false);
+    dispatch(setIsMobile(true));
   };
 
   const toggleSearch = () => {
@@ -54,6 +59,30 @@ const Header = () => {
     setIsNotification((prev) => !prev);
     setIsSearch(false);
     setIsNewGroup(false);
+  };
+
+  const logoutHandler = async () => {
+    let toastId = toast.loading("Logging out...");
+
+    try {
+      const { data } = await axios.get(`${server}/user/logout`, {
+        withCredentials: true,
+      });
+
+      dispatch(userNotExists());
+
+      toast.success(data.message, {
+        duration: 1000,
+        id: toastId,
+      });
+    } catch (error) {
+      console.log(error);
+
+      toast.error(error?.response?.data?.message || "Something went wrong!", {
+        duration: 1000,
+        id: toastId,
+      });
+    }
   };
 
   return (
@@ -111,7 +140,11 @@ const Header = () => {
               onClick={() => navigate("/groups")}
               icon={<GroupIcon />}
             />
-            <IconBtn title="Logout" onClick={() => {}} icon={<LogoutIcon />} />
+            <IconBtn
+              title="Logout"
+              onClick={logoutHandler}
+              icon={<LogoutIcon />}
+            />
           </Box>
         </Toolbar>
       </AppBar>
