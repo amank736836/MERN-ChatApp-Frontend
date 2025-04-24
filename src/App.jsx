@@ -1,12 +1,12 @@
 import axios from "axios";
 import React, { lazy, Suspense, useEffect } from "react";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import ProtectRoute from "./components/auth/ProtectRoute";
 import { LayoutLoader } from "./components/layout/Loaders";
 import { server } from "./constants/config";
-import { userNotExists } from "./redux/reducers/auth";
+import { userExists, userNotExists } from "./redux/reducers/auth";
 
 const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
 const Dashboard = lazy(() => import("./pages/admin/Dashboard"));
@@ -28,11 +28,15 @@ function App() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const { data } = await axios.get(`${server}/user/me`);
+        const { data } = await axios.get(`${server}/user/me`, {
+          withCredentials: true,
+        });
 
-        if (data.user) {
-          user = data.user;
-        }
+        dispatch(userExists(data.user));
+
+        toast.success("Welcome back!", {
+          duration: 1000,
+        });
       } catch (error) {
         dispatch(userNotExists());
       }
