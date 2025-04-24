@@ -22,7 +22,6 @@ const AppLayout = () => (WrappedComponent) => {
 
     const { data: chatsData, isLoading: isLoadingChats } = useMyChatsQuery("");
 
-    console.log("Chats", chatsData, isLoadingChats);
 
     const handleDeleteChat = (e, _id, groupChat) => {
       e.preventDefault();
