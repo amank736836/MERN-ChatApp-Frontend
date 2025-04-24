@@ -62,6 +62,7 @@ const Login = () => {
 
       toast.success("Login successful!", {
         duration: 1000,
+        id: toastId,
       });
 
       toast
@@ -69,17 +70,17 @@ const Login = () => {
           loading: "Redirecting...",
           success: "Redirected!",
           error: "Redirect failed",
+          id: toastId,
+          duration: 1000,
         })
         .then(() => {
           navigate("/");
-          toast.dismiss(toastId);
         });
     } catch (error) {
       toast.error(error?.response?.data?.message || "Login failed", {
         duration: 1000,
+        id: toastId,
       });
-    } finally {
-      toast.dismiss(toastId);
     }
   };
 
@@ -101,11 +102,7 @@ const Login = () => {
         withCredentials: true,
       };
 
-      const response = await axios.post(
-        `${server}/user/new`,
-        formDate,
-        config
-      );
+      await axios.post(`${server}/user/new`, formDate, config);
 
       dispatch(userExists(true));
 
@@ -119,15 +116,12 @@ const Login = () => {
           error: "Redirect failed",
         })
         .then(() => {
-          toast.dismiss(toastId);
           navigate("/");
         });
     } catch (error) {
       toast.error(error?.response?.data?.message || "Sign up failed", {
         duration: 1000,
       });
-    } finally {
-      toast.dismiss(toastId);
     }
   };
 
