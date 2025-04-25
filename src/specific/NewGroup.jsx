@@ -46,7 +46,12 @@ const NewGroup = ({ close }) => {
       <Box
         sx={{
           p: { xs: "1.5rem", sm: "3rem" },
-          width: "30rem",
+          width: {
+            xs: "80vw",
+            sm: "70vw",
+            md: "50vw",
+            lg: "30vw",
+          },
           borderRadius: "12px",
           background: dialogBg,
         }}
