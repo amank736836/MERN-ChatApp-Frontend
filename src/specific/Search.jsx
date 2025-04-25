@@ -1,46 +1,86 @@
 import { useInputValidation } from "6pp";
 import { Search as SearchIcon } from "@mui/icons-material";
 import {
+  Box,
   Dialog,
   DialogTitle,
   InputAdornment,
   List,
-  Stack,
+  Skeleton,
   TextField,
-  Box,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
 import UserItem from "../components/shared/UserItem";
-import { sampleUsers } from "../constants/sampleData";
 import { dialogBg } from "../constants/color";
+import {
+  useLazySearchUserQuery,
+  useSendFriendRequestMutation,
+} from "../redux/api/api";
+import { setIsSearch } from "../redux/reducers/misc";
+import { useAsyncMutation } from "../hooks/hook";
 
-const Search = ({ close }) => {
+const Search = () => {
+  const { isSearch } = useSelector((state) => state.misc);
+
   const search = useInputValidation("");
 
-  const [isLoadingSendFriendRequest, setIsLoadingSendFriendRequest] =
-    useState(false);
+  const [searchUser, { isLoading: isLoadingSearchUser, error }] =
+    useLazySearchUserQuery(search.value);
 
-  const [users, setUsers] = useState(sampleUsers);
+  const [
+    sendFriendRequest,
+    {
+      isLoading: isLoadingSendFriendRequest,
+      isError: sendFriendRequestError,
+      error: sendFriendRequestErrorData,
+    },
+  ] = useAsyncMutation(useSendFriendRequestMutation);
+
+  const [users, setUsers] = useState([]);
+
+  const dispatch = useDispatch();
+
+  const closeSearch = () => {
+    dispatch(setIsSearch(false));
+  };
 
   const sendFriendRequestHandler = async (userId) => {
     if (!userId) return;
-    setIsLoadingSendFriendRequest(true);
-    try {
-      // await sendFriendRequest(userId);
-      setUsers((prev) => prev.filter((user) => user._id !== userId));
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoadingSendFriendRequest(false);
-    }
+    await sendFriendRequest("Sending friend request...", userId);
+    setUsers((prev) => prev.filter((user) => user.id !== userId));
   };
 
+  useEffect(() => {
+    const timeOutId = setTimeout(() => {
+      try {
+        searchUser(search.value).then((res) => {
+          console.log(res.data.users);
+          setUsers(res.data.users);
+        });
+      } catch (error) {
+        console.error(error);
+        toast.error("Error fetching users");
+      }
+    }, 300);
+
+    return () => {
+      clearTimeout(timeOutId);
+    };
+  }, [search.value, searchUser]);
+
   return (
-    <Dialog open onClose={close}>
+    <Dialog open={isSearch} onClose={closeSearch}>
       <Box
         sx={{
-          p: "2rem",
-          width: "28rem",
+          p: "1rem",
+          width: {
+            xs: "80vw",
+            sm: "70vw",
+            md: "50vw",
+            lg: "30vw",
+          },
           background: dialogBg,
         }}
       >
@@ -50,7 +90,7 @@ const Search = ({ close }) => {
           color="#333"
           sx={{ pb: 2 }}
         >
-          Find a Friend or Group
+          Find a Friend
         </DialogTitle>
         <TextField
           value={search.value}
@@ -76,6 +116,7 @@ const Search = ({ close }) => {
         />
 
         <List
+          key={"SearchList"}
           sx={{
             maxHeight: "300px",
             overflowY: "auto",
@@ -88,14 +129,58 @@ const Search = ({ close }) => {
             },
           }}
         >
-          {users.map((user) => (
-            <UserItem
-              user={user}
-              key={user._id}
-              handlerIsLoading={isLoadingSendFriendRequest}
-              handler={sendFriendRequestHandler}
-            />
-          ))}
+          {isLoadingSearchUser ? (
+            <Box
+              key={"loadingUsers"}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100%",
+              }}
+            >
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height={50}
+                animation="wave"
+                sx={{ borderRadius: "8px" }}
+              />
+            </Box>
+          ) : error ? (
+            <Box
+              key={"errorFetchingUsers"}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100%",
+              }}
+            >
+              <p style={{ color: "#f00" }}>Error fetching users</p>
+            </Box>
+          ) : users.length === 0 ? (
+            <Box
+              key={"noUsersFound"}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100%",
+              }}
+            >
+              <p style={{ color: "#555" }}>No users found</p>
+            </Box>
+          ) : (
+            users.map((user) => (
+              <UserItem
+                user={user}
+                key={user.id}
+                handler={sendFriendRequestHandler}
+                handlerIsLoading={isLoadingSendFriendRequest}
+              />
+            ))
+          )}
         </List>
       </Box>
     </Dialog>
