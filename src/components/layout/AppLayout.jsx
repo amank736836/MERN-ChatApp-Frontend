@@ -3,6 +3,7 @@ import React, { lazy } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { gradientBg } from "../../constants/color";
+import { useErrors } from "../../hooks/hook";
 import { useMyChatsQuery } from "../../redux/api/api";
 import { setIsMobile } from "../../redux/reducers/misc";
 import Title from "../shared/Title";
@@ -20,8 +21,21 @@ const AppLayout = () => (WrappedComponent) => {
 
     const { isMobile } = useSelector((state) => state.misc);
 
-    const { data: chatsData, isLoading: isLoadingChats } = useMyChatsQuery("");
+    const { user } = useSelector((state) => state.auth);
 
+    const {
+      data: chatsData,
+      isLoading: isLoadingChats,
+      isError: isErrorChats,
+      error: errorChats,
+    } = useMyChatsQuery("");
+
+    useErrors([
+      {
+        isError: isErrorChats,
+        error: errorChats,
+      },
+    ]);
 
     const handleDeleteChat = (e, _id, groupChat) => {
       e.preventDefault();
@@ -39,7 +53,19 @@ const AppLayout = () => (WrappedComponent) => {
         {isLoadingChats ? (
           <Skeleton />
         ) : (
-          <Drawer open={isMobile} onClose={handleMobileClose}>
+          <Drawer
+            open={isMobile}
+            onClose={handleMobileClose}
+            anchor="right"
+            sx={{
+              "& .MuiDrawer-paper": {
+                width: "70vw",
+                background: gradientBg,
+                boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+              },
+            }}
+            onClick={handleMobileClose}
+          >
             <ChatList
               w="70vw"
               chats={chatsData.chats}
@@ -90,7 +116,7 @@ const AppLayout = () => (WrappedComponent) => {
             }}
             height={"100%"}
           >
-            <Profile />
+            <Profile user={user} />
           </Grid>
         </Grid>
       </>
