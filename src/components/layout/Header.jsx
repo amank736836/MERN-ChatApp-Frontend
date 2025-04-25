@@ -23,7 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { server } from "../../constants/config";
 import { userNotExists } from "../../redux/reducers/auth";
-import { setIsMobile } from "../../redux/reducers/misc";
+import { setIsMobile, setIsSearch } from "../../redux/reducers/misc";
 
 const SearchDialog = lazy(() => import("../../specific/Search"));
 const NotificationsDialog = lazy(() => import("../../specific/Notifications"));
@@ -33,20 +33,17 @@ const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { isMobile } = useSelector((state) => state.misc);
+  const { isMobile, isSearch } = useSelector((state) => state.misc);
 
-  const [isSearch, setIsSearch] = useState(false);
   const [isNewGroup, setIsNewGroup] = useState(false);
   const [isNotification, setIsNotification] = useState(false);
 
-  const handleMobile = () => {
+  const openMobile = () => {
     dispatch(setIsMobile(true));
   };
 
-  const toggleSearch = () => {
-    setIsSearch((prev) => !prev);
-    setIsNewGroup(false);
-    setIsNotification(false);
+  const openSearch = () => {
+    dispatch(setIsSearch(true));
   };
 
   const toggleNewGroup = () => {
@@ -76,7 +73,7 @@ const Header = () => {
         id: toastId,
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
 
       toast.error(error?.response?.data?.message || "Something went wrong!", {
         duration: 1000,
@@ -111,7 +108,7 @@ const Header = () => {
           </Typography>
 
           <Box sx={{ display: { xs: "block", sm: "none" } }}>
-            <IconButton color="inherit" onClick={handleMobile}>
+            <IconButton color="inherit" onClick={openMobile}>
               {isMobile ? <CloseIcon /> : <MenuIcon />}
             </IconButton>
           </Box>
@@ -122,7 +119,7 @@ const Header = () => {
           <Box display="flex" gap={1}>
             <IconBtn
               title="Search"
-              onClick={toggleSearch}
+              onClick={openSearch}
               icon={<SearchIcon />}
             />
             <IconBtn
@@ -152,7 +149,7 @@ const Header = () => {
       {/* Dialogs */}
       {isSearch && (
         <Suspense fallback={<Backdrop open={true} />}>
-          <SearchDialog close={toggleSearch} />
+          <SearchDialog />
         </Suspense>
       )}
 

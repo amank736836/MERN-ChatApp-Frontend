@@ -1,5 +1,6 @@
 import {
   CalendarMonth as CalendarIcon,
+  Email as EmailIcon,
   Face as FaceIcon,
   AlternateEmail as UsernameIcon,
 } from "@mui/icons-material";
@@ -8,7 +9,8 @@ import moment from "moment";
 import React from "react";
 import { gradientBg } from "../constants/color";
 
-const Profile = () => {
+const Profile = ({ user }) => {
+  console.log("User Profile", user);
   return (
     <Box
       sx={{
@@ -39,22 +41,22 @@ const Profile = () => {
             border: "5px solid white",
             boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.2)",
           }}
-          src="https://www.w3schools.com/howto/img_avatar.png"
+          src={user?.avatar}
           alt="Profile Avatar"
         />
+        <ProfileCard heading="Name" text={user?.name} Icon={<FaceIcon />}
+
+        />
+        <ProfileCard heading="Bio" text={user?.bio} />
         <ProfileCard
           heading="Username"
-          text="JohnDoe123"
+          text={user?.username}
           Icon={<UsernameIcon />}
         />
-        <ProfileCard heading="Name" text="John Doe" Icon={<FaceIcon />} />
+        <ProfileCard heading="Email" text={user?.email} Icon={<EmailIcon />} />
         <ProfileCard
-          heading="Bio"
-          text="Passionate developer and tech enthusiast."
-        />
-        <ProfileCard
-          heading="Joined On"
-          text={moment("2023-01-01").fromNow(true)}
+          heading="Joining Days"
+          text={moment(user?.createdAt).fromNow(true)}
           Icon={<CalendarIcon />}
         />
       </Stack>
@@ -73,6 +75,8 @@ const ProfileCard = ({ text, Icon, heading }) => (
       borderRadius: "8px",
       backgroundColor: "#f5f5f5",
       boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.1)",
+      alignItems: "center",
+      justifyContent: "center",
     }}
   >
     {Icon && <Box sx={{ color: "#1976d2" }}>{Icon}</Box>}
