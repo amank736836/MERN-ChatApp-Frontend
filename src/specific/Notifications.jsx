@@ -21,8 +21,13 @@ const Notifications = ({ close }) => {
     <Dialog open onClose={close}>
       <Box
         sx={{
-          p: "2rem",
-          width: "28rem",
+          p: "1rem",
+          width: {
+            xs: "80vw",
+            sm: "70vw",
+            md: "50vw",
+            lg: "30vw",
+          },
           background: dialogBg,
           boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
           "&::-webkit-scrollbar": {
@@ -77,53 +82,58 @@ const NotificationItem = memo(({ sender, _id, handler }) => {
   const { name, avatar } = sender;
 
   return (
-    <ListItem
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        background: "white",
-        borderRadius: "8px",
-        boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.1)",
-        p: "1rem",
-        mb: "0.5rem",
-      }}
-    >
-      <Avatar src={transformImageUrl(avatar)} sx={{ width: 50, height: 50 }} />
-
-      <Typography
-        variant="body1"
+    <>
+      <ListItem
         sx={{
-          flexGrow: 1,
-          display: "-webkit-box",
-          WebkitLineClamp: 1,
-          WebkitBoxOrient: "vertical",
-          overflow: "hidden",
-          textOverflow: "ellipsis",
-          ml: "1rem",
+          display: "flex",
+          alignItems: "center",
+          background: "white",
+          borderRadius: "8px",
+          boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.1)",
+          p: "1rem",
+          mb: "0.5rem",
         }}
       >
-        {name} sent you a friend request
-      </Typography>
-
-      <Stack direction="row" spacing={1}>
-        <Button
-          onClick={() => handler({ _id, accept: true })}
-          variant="contained"
-          color="success"
-          size="small"
-        >
-          Accept
-        </Button>
-        <Button
-          onClick={() => handler({ _id, accept: false })}
-          variant="contained"
-          color="error"
-          size="small"
-        >
-          Reject
-        </Button>
-      </Stack>
-    </ListItem>
+        <Avatar
+          src={transformImageUrl(avatar)}
+          sx={{ width: 50, height: 50 }}
+        />
+        <Stack direction={"column"} alignItems={"center"} width={"100%"}>
+          <Typography
+            variant="body1"
+            sx={{
+              flexGrow: 1,
+              display: "-webkit-box",
+              WebkitLineClamp: 1,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              ml: "1rem",
+            }}
+          >
+            {name} sent you a friend request
+          </Typography>
+          <Stack spacing={1} direction={"row"} justifyContent="center">
+            <Button
+              onClick={() => handler({ _id, accept: true })}
+              variant="contained"
+              color="success"
+              size="small"
+            >
+              Accept
+            </Button>
+            <Button
+              onClick={() => handler({ _id, accept: false })}
+              variant="contained"
+              color="error"
+              size="small"
+            >
+              Reject
+            </Button>
+          </Stack>
+        </Stack>
+      </ListItem>
+    </>
   );
 });
 
