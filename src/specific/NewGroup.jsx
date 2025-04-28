@@ -13,8 +13,10 @@ import UserItem from "../components/shared/UserItem";
 import { sampleUsers } from "../constants/sampleData";
 import { usernameValidator } from "../lib/validators";
 import { dialogBg } from "../constants/color";
+import { useDispatch, useSelector } from "react-redux";
+import { setIsNewGroup } from "../redux/reducers/misc";
 
-const NewGroup = ({ close }) => {
+const NewGroup = () => {
   const groupName = useInputValidation("", usernameValidator);
 
   const [members, setMembers] = useState(sampleUsers);
@@ -41,8 +43,16 @@ const NewGroup = ({ close }) => {
     setSelectedMembers([]);
   }, []);
 
+  const { isNewGroup } = useSelector((state) => state.misc);
+
+  const dispatch = useDispatch();
+
+  const closeGroup = () => {
+    dispatch(setIsNewGroup(false));
+  };
+
   return (
-    <Dialog open onClose={close}>
+    <Dialog open={isNewGroup} onClose={closeGroup}>
       <Box
         sx={{
           p: { xs: "1.5rem", sm: "3rem" },
