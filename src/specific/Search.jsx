@@ -24,6 +24,12 @@ import { useAsyncMutation } from "../hooks/hook";
 const Search = () => {
   const { isSearch } = useSelector((state) => state.misc);
 
+  const dispatch = useDispatch();
+
+  const closeSearch = () => {
+    dispatch(setIsSearch(false));
+  };
+
   const search = useInputValidation("");
 
   const [searchUser, { isLoading: isLoadingSearchUser, error }] =
@@ -40,12 +46,6 @@ const Search = () => {
 
   const [users, setUsers] = useState([]);
 
-  const dispatch = useDispatch();
-
-  const closeSearch = () => {
-    dispatch(setIsSearch(false));
-  };
-
   const sendFriendRequestHandler = async (userId) => {
     if (!userId) return;
     await sendFriendRequest("Sending friend request...", userId);
@@ -56,7 +56,6 @@ const Search = () => {
     const timeOutId = setTimeout(() => {
       try {
         searchUser(search.value).then((res) => {
-          console.log(res.data.users);
           setUsers(res.data.users);
         });
       } catch (error) {
