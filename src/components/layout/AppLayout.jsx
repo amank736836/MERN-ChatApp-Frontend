@@ -8,20 +8,24 @@ import { useMyChatsQuery } from "../../redux/api/api";
 import { setIsMobile } from "../../redux/reducers/misc";
 import Title from "../shared/Title";
 import Header from "./Header";
+import { getSocket } from "../../socket";
 
 const ChatList = lazy(() => import("../../specific/ChatList"));
 const Profile = lazy(() => import("../../specific/Profile"));
 
 const AppLayout = () => (WrappedComponent) => {
   return (props) => {
+    const { isMobile } = useSelector((state) => state.misc);
+
     const dispatch = useDispatch();
+
+    const handleMobileClose = () => {
+      dispatch(setIsMobile(false));
+    };
+
 
     const params = useParams();
     const chatId = params.chatId || "1";
-
-    const { isMobile } = useSelector((state) => state.misc);
-
-    const { user } = useSelector((state) => state.auth);
 
     const {
       data: chatsData,
@@ -40,10 +44,6 @@ const AppLayout = () => (WrappedComponent) => {
     const handleDeleteChat = (e, _id, groupChat) => {
       e.preventDefault();
       console.log("Delete chat", _id, groupChat);
-    };
-
-    const handleMobileClose = () => {
-      dispatch(setIsMobile(false));
     };
 
     return (
@@ -105,7 +105,10 @@ const AppLayout = () => (WrappedComponent) => {
             )}
           </Grid>
           <Grid size={{ sm: 8, md: 7, lg: 6, xs: 12 }} height={"100%"}>
-            <WrappedComponent {...props} />
+            <WrappedComponent {...props} 
+              chatId={chatId}
+              
+            />
           </Grid>
           <Grid
             size={{ lg: 3 }}
@@ -116,7 +119,7 @@ const AppLayout = () => (WrappedComponent) => {
             }}
             height={"100%"}
           >
-            <Profile user={user} />
+            <Profile />
           </Grid>
         </Grid>
       </>
