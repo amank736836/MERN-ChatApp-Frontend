@@ -23,7 +23,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { server } from "../../constants/config";
 import { userNotExists } from "../../redux/reducers/auth";
-import { setIsMobile, setIsSearch } from "../../redux/reducers/misc";
+import {
+  setIsMobile,
+  setIsNewGroup,
+  setIsNotification,
+  setIsSearch,
+} from "../../redux/reducers/misc";
 
 const SearchDialog = lazy(() => import("../../specific/Search"));
 const NotificationsDialog = lazy(() => import("../../specific/Notifications"));
@@ -33,10 +38,9 @@ const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { isMobile, isSearch } = useSelector((state) => state.misc);
-
-  const [isNewGroup, setIsNewGroup] = useState(false);
-  const [isNotification, setIsNotification] = useState(false);
+  const { isMobile, isSearch, isNotification, isNewGroup } = useSelector(
+    (state) => state.misc
+  );
 
   const openMobile = () => {
     dispatch(setIsMobile(true));
@@ -46,16 +50,12 @@ const Header = () => {
     dispatch(setIsSearch(true));
   };
 
-  const toggleNewGroup = () => {
-    setIsNewGroup((prev) => !prev);
-    setIsSearch(false);
-    setIsNotification(false);
+  const openNotification = () => {
+    dispatch(setIsNotification(true));
   };
 
-  const toggleNotification = () => {
-    setIsNotification((prev) => !prev);
-    setIsSearch(false);
-    setIsNewGroup(false);
+  const openNewGroup = () => {
+    dispatch(setIsNewGroup(true));
   };
 
   const logoutHandler = async () => {
@@ -124,12 +124,12 @@ const Header = () => {
             />
             <IconBtn
               title="New Group"
-              onClick={toggleNewGroup}
+              onClick={openNewGroup}
               icon={<AddIcon />}
             />
             <IconBtn
               title="Notifications"
-              onClick={toggleNotification}
+              onClick={openNotification}
               icon={<NotificationsIcon />}
             />
             <IconBtn
@@ -155,13 +155,13 @@ const Header = () => {
 
       {isNewGroup && (
         <Suspense fallback={<Backdrop open={true} />}>
-          <NewGroupDialog close={toggleNewGroup} />
+          <NewGroupDialog />
         </Suspense>
       )}
 
       {isNotification && (
         <Suspense fallback={<Backdrop open={true} />}>
-          <NotificationsDialog close={toggleNotification} />
+          <NotificationsDialog />
         </Suspense>
       )}
     </>
