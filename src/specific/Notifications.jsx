@@ -1,24 +1,107 @@
 import {
   Avatar,
+  Box,
   Button,
   Dialog,
   DialogTitle,
+  List,
   ListItem,
+  Skeleton,
   Stack,
   Typography,
-  Box,
-  List,
 } from "@mui/material";
-import React, { memo } from "react";
-import { sampleNotifications } from "../constants/sampleData";
-import { transformImageUrl } from "../lib/features";
+import React, { memo, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { dialogBg } from "../constants/color";
+import { useErrors } from "../hooks/hook";
+import { transformImageUrl } from "../lib/features";
+import {
+  useAcceptFriendRequestMutation,
+  useGetNotificationsQuery,
+} from "../redux/api/api";
+import { setIsNotification } from "../redux/reducers/misc";
+import toast from "react-hot-toast";
 
-const Notifications = ({ close }) => {
-  const friendRequestHandler = ({ _id, accept }) => {};
+const Notifications = () => {
+  const { isNotification } = useSelector((state) => state.misc);
+
+  const dispatch = useDispatch();
+
+  const closeNotification = () => {
+    dispatch(setIsNotification(false));
+  };
+
+  const [notification, setNotification] = useState([]);
+
+  const {
+    data: notificationsData,
+    isLoading: isLoadingNotifications,
+    isError: isErrorNotifications,
+    error: errorNotifications,
+  } = useGetNotificationsQuery();
+
+  useErrors([
+    {
+      isError: isErrorNotifications,
+      error: errorNotifications,
+    },
+  ]);
+
+  useEffect(() => {
+    if (notificationsData) {
+      setNotification(notificationsData.allRequests);
+    }
+  }, [notificationsData]);
+
+  const [
+    acceptFriendRequest,
+    {
+      isLoading: isLoadingAcceptFriendRequest,
+      isError: isErrorAcceptFriendRequest,
+      error: errorAcceptFriendRequest,
+    },
+  ] = useAcceptFriendRequestMutation();
+
+  const friendRequestHandler = async ({ _id, accept }) => {
+    console.log("Accepting friend request", _id, accept);
+    const toastId = toast.loading("Accepting friend request...");
+    try {
+      const res = await acceptFriendRequest({
+        requestId: _id,
+        accept,
+      });
+
+      if (res.data?.success) {
+        toast.success(
+          res.data?.message || "Friend request accepted successfully",
+          {
+            id: toastId,
+            duration: 1000,
+          }
+        );
+        setNotification((prev) =>
+          prev.filter((notification) => notification._id !== _id)
+        );
+      } else if (res.error) {
+        toast.error(
+          res.error?.data?.message || "Error accepting friend request",
+          {
+            id: toastId,
+            duration: 1000,
+          }
+        );
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(error?.message || "Error accepting friend request", {
+        id: toastId,
+        duration: 1000,
+      });
+    }
+  };
 
   return (
-    <Dialog open onClose={close}>
+    <Dialog open={isNotification} onClose={closeNotification}>
       <Box
         sx={{
           p: "1rem",
@@ -42,7 +125,7 @@ const Notifications = ({ close }) => {
           color="#333"
           sx={{ pb: 2 }}
         >
-          Notifications
+          Friendship Requests
         </DialogTitle>
 
         <List
@@ -58,8 +141,21 @@ const Notifications = ({ close }) => {
             },
           }}
         >
-          {sampleNotifications.length > 0 ? (
-            sampleNotifications.map((notification) => (
+          {isLoadingNotifications ? (
+            <Skeleton
+              variant="rectangular"
+              width={"100%"}
+              height={100}
+              sx={{
+                borderRadius: "8px",
+                mb: "0.5rem",
+                background:
+                  "linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%)",
+                animation: "loading 1.5s infinite",
+              }}
+            />
+          ) : notification.length > 0 ? (
+            notificationsData.allRequests.map((notification) => (
               <NotificationItem
                 sender={notification.sender}
                 _id={notification._id}
@@ -69,7 +165,9 @@ const Notifications = ({ close }) => {
             ))
           ) : (
             <Typography textAlign="center" color="gray">
-              No Notifications yet
+              {notification.length === 0
+                ? "No Notifications yet"
+                : "Error fetching notifications"}
             </Typography>
           )}
         </List>
@@ -98,7 +196,14 @@ const NotificationItem = memo(({ sender, _id, handler }) => {
           src={transformImageUrl(avatar)}
           sx={{ width: 50, height: 50 }}
         />
-        <Stack direction={"column"} alignItems={"center"} width={"100%"}>
+        <Stack
+          direction={{
+            xs: "column",
+            sm: "row",
+          }}
+          alignItems={"center"}
+          width={"100%"}
+        >
           <Typography
             variant="body1"
             sx={{
@@ -106,12 +211,12 @@ const NotificationItem = memo(({ sender, _id, handler }) => {
               display: "-webkit-box",
               WebkitLineClamp: 1,
               WebkitBoxOrient: "vertical",
-              overflow: "hidden",
+              overflow: "auto",
               textOverflow: "ellipsis",
               ml: "1rem",
             }}
           >
-            {name} sent you a friend request
+            {name}
           </Typography>
           <Stack spacing={1} direction={"row"} justifyContent="center">
             <Button
@@ -123,7 +228,12 @@ const NotificationItem = memo(({ sender, _id, handler }) => {
               Accept
             </Button>
             <Button
-              onClick={() => handler({ _id, accept: false })}
+              onClick={() =>
+                handler({
+                  _id,
+                  accept: false,
+                })
+              }
               variant="contained"
               color="error"
               size="small"
