@@ -49,7 +49,7 @@ const Login = () => {
     const toastId = toast.loading("Logging in...");
 
     try {
-      await axios.post(
+      const res = await axios.post(
         `${server}/user/login`,
         {
           username: username.value,
@@ -58,7 +58,7 @@ const Login = () => {
         config
       );
 
-      dispatch(userExists(true));
+      dispatch(userExists(res.data.user));
 
       toast.success("Login successful!", {
         duration: 1000,
@@ -102,18 +102,20 @@ const Login = () => {
         withCredentials: true,
       };
 
-      await axios.post(`${server}/user/new`, formDate, config);
+      const res = await axios.post(`${server}/user/new`, formDate, config);
 
       dispatch(userExists(true));
 
       toast.success("Sign up successful!", {
         duration: 1000,
+        id: toastId,
       });
       toast
         .promise(new Promise((resolve) => resolve()), {
           loading: "Redirecting...",
           success: "Redirected!",
           error: "Redirect failed",
+          id: toastId,
         })
         .then(() => {
           navigate("/");
@@ -121,6 +123,7 @@ const Login = () => {
     } catch (error) {
       toast.error(error?.response?.data?.message || "Sign up failed", {
         duration: 1000,
+        id: toastId,
       });
     }
   };
