@@ -7,6 +7,7 @@ import ProtectRoute from "./components/auth/ProtectRoute";
 import { LayoutLoader } from "./components/layout/Loaders";
 import { server } from "./constants/config";
 import { userExists, userNotExists } from "./redux/reducers/auth";
+import { SocketProvider } from "./socket";
 
 const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
 const Dashboard = lazy(() => import("./pages/admin/Dashboard"));
@@ -50,9 +51,14 @@ function App() {
   ) : (
     <Router>
       <Suspense fallback={<LayoutLoader />}>
-        {/* <span>Header</span> */}
         <Routes>
-          <Route element={<ProtectRoute user={user} />}>
+          <Route
+            element={
+              <SocketProvider>
+                <ProtectRoute user={user} />
+              </SocketProvider>
+            }
+          >
             <Route path="/" element={<Home />} />
             <Route path="/chat/:chatId" element={<Chat />} />
             <Route path="/groups" element={<Groups />} />
