@@ -7,10 +7,13 @@ import {
 import { Avatar, Box, Stack, Typography } from "@mui/material";
 import moment from "moment";
 import React from "react";
+import { useSelector } from "react-redux";
 import { gradientBg } from "../constants/color";
+import { transformImageUrl } from "../lib/features";
 
-const Profile = ({ user }) => {
-  console.log("User Profile", user);
+const Profile = () => {
+  const { user } = useSelector((state) => state.auth);
+
   return (
     <Box
       sx={{
@@ -41,12 +44,10 @@ const Profile = ({ user }) => {
             border: "5px solid white",
             boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.2)",
           }}
-          src={user?.avatar}
+          src={transformImageUrl(user?.avatar?.url)}
           alt="Profile Avatar"
         />
-        <ProfileCard heading="Name" text={user?.name} Icon={<FaceIcon />}
-
-        />
+        <ProfileCard heading="Name" text={user?.name} Icon={<FaceIcon />} />
         <ProfileCard heading="Bio" text={user?.bio} />
         <ProfileCard
           heading="Username"
