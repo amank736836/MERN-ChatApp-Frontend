@@ -63,7 +63,6 @@ const Notifications = () => {
   ] = useAcceptFriendRequestMutation();
 
   const friendRequestHandler = async ({ _id, accept }) => {
-    console.log("Accepting friend request", _id, accept);
     const toastId = toast.loading("Accepting friend request...");
     try {
       const res = await acceptFriendRequest({
