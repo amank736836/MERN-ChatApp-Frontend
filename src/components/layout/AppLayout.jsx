@@ -1,14 +1,19 @@
 import { Drawer, Grid, Skeleton, Stack } from "@mui/material";
-import React, { lazy } from "react";
+import React, { lazy, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { gradientBg } from "../../constants/color";
-import { useErrors } from "../../hooks/hook";
+import { NEW_MESSAGE_ALERT, NEW_REQUEST } from "../../constants/events";
+import { useErrors, useSocketEvents } from "../../hooks/hook";
 import { useMyChatsQuery } from "../../redux/api/api";
+import {
+  incrementNotificationCount,
+  setNewMessagesAlert,
+} from "../../redux/reducers/chat";
 import { setIsMobile } from "../../redux/reducers/misc";
+import { getSocket } from "../../socket";
 import Title from "../shared/Title";
 import Header from "./Header";
-import { getSocket } from "../../socket";
 
 const ChatList = lazy(() => import("../../specific/ChatList"));
 const Profile = lazy(() => import("../../specific/Profile"));
@@ -18,20 +23,21 @@ const AppLayout = () => (WrappedComponent) => {
     const { isMobile } = useSelector((state) => state.misc);
 
     const dispatch = useDispatch();
+    const socket = getSocket();
 
     const handleMobileClose = () => {
       dispatch(setIsMobile(false));
     };
 
-
     const params = useParams();
-    const chatId = params.chatId || "1";
+    const chatId = params.chatId || null;
 
     const {
       data: chatsData,
       isLoading: isLoadingChats,
       isError: isErrorChats,
       error: errorChats,
+      refetch: refetchChats,
     } = useMyChatsQuery("");
 
     useErrors([
@@ -46,6 +52,25 @@ const AppLayout = () => (WrappedComponent) => {
       console.log("Delete chat", _id, groupChat);
     };
 
+    const newMessagesAlertHandler = useCallback(
+      (data) => {
+        if (data.chatId === chatId) return;
+        dispatch(setNewMessagesAlert(data));
+      },
+      [chatId]
+    );
+
+    const newRequestHandler = useCallback(() => {
+      dispatch(incrementNotificationCount());
+    }, [dispatch]);
+
+    const eventHandlers = {
+      [NEW_MESSAGE_ALERT]: newMessagesAlertHandler,
+      [NEW_REQUEST]: newRequestHandler,
+    };
+
+    useSocketEvents(socket, eventHandlers);
+
     return (
       <>
         <Title title="Chat App" description="This is the chat App" />
@@ -59,7 +84,7 @@ const AppLayout = () => (WrappedComponent) => {
             anchor="right"
             sx={{
               "& .MuiDrawer-paper": {
-                width: "70vw",
+                width: "80vw",
                 background: gradientBg,
                 boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
               },
@@ -67,10 +92,9 @@ const AppLayout = () => (WrappedComponent) => {
             onClick={handleMobileClose}
           >
             <ChatList
-              w="70vw"
+              w="80vw"
               chats={chatsData.chats}
               chatId={chatId}
-              newMessagesAlert={[{ chatId, count: 2 }]}
               onlineUsers={["1", "2"]}
               handleDeleteChat={handleDeleteChat}
             />
@@ -105,10 +129,7 @@ const AppLayout = () => (WrappedComponent) => {
             )}
           </Grid>
           <Grid size={{ sm: 8, md: 7, lg: 6, xs: 12 }} height={"100%"}>
-            <WrappedComponent {...props} 
-              chatId={chatId}
-              
-            />
+            <WrappedComponent {...props} chatId={chatId} />
           </Grid>
           <Grid
             size={{ lg: 3 }}
