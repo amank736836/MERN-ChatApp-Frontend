@@ -4,7 +4,13 @@ import {
   Send as SendIcon,
 } from "@mui/icons-material";
 import { IconButton, Stack } from "@mui/material";
-import React, { Fragment, useCallback, useRef, useState } from "react";
+import React, {
+  Fragment,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import FileMenu from "../components/dialog/FileMenu";
 import AppLayout from "../components/layout/AppLayout";
@@ -16,9 +22,12 @@ import { useErrors, useSocketEvents } from "../hooks/hook";
 import { useGetChatDetailsQuery, useGetMessagesQuery } from "../redux/api/api";
 import { setIsFileMenu } from "../redux/reducers/misc";
 import { getSocket } from "../socket";
+import { removeNewMessagesAlert } from "../redux/reducers/chat";
 
 const Chat = ({ chatId }) => {
   const { user } = useSelector((state) => state.auth);
+  const { uploadingLoader } = useSelector((state) => state.misc);
+
   const containerRef = useRef(null);
   const socket = getSocket();
   const dispatch = useDispatch();
@@ -27,6 +36,11 @@ const Chat = ({ chatId }) => {
   const [messages, setMessages] = useState([]);
   const [page, setPage] = useState(1);
   const [fileMenuAnchor, setFileMenuAnchor] = useState(null);
+
+  const handleFileOpen = (e) => {
+    dispatch(setIsFileMenu(true));
+    setFileMenuAnchor(e.currentTarget);
+  };
 
   const {
     data: chatDetails,
@@ -84,33 +98,29 @@ const Chat = ({ chatId }) => {
     setMessage("");
   };
 
-  const newMessagesHandler = useCallback((data) => {
-    console.log("New message received", data);
-    setMessages((prevMessages) => {
-      const newMessages = [...prevMessages, data.message];
-      if (containerRef.current) {
-        containerRef.current.scrollTop =
-          containerRef.current.scrollHeight - containerRef.current.clientHeight;
-      }
-      return newMessages;
-    });
-  }, []);
+  const newMessagesHandler = useCallback(
+    (data) => {
+      if (data.chatId !== chatId) return;
+      setMessages((prevMessages) => [...prevMessages, data.message]);
+    },
+    [chatId]
+  );
 
   const eventHandler = { [NEW_MESSAGE]: newMessagesHandler };
 
   useSocketEvents(socket, eventHandler);
 
-  // useEffect(() => {
-  //   socket.on(NEW_MESSAGE, newMessagesHandler);
-  //   return () => {
-  //     socket.off(NEW_MESSAGE, newMessagesHandler);
-  //   };
-  // }, [socket]);
+  useEffect(() => {
+    console.log("Chat mounted", chatId);
+    dispatch(removeNewMessagesAlert(chatId));
 
-  const handleFileOpen = () => {
-    dispatch(setIsFileMenu(true));
-    setFileMenuAnchor(e.currentTarget);
-  };
+    return () => {
+      setMessages([]);
+      setPage(1);
+      setOldMessages([]);
+      setMessage("");
+    };
+  }, [chatId]);
 
   return isLoadingChatDetails ? (
     <Stack
@@ -142,7 +152,7 @@ const Chat = ({ chatId }) => {
         }}
       >
         {allMessages.map((message, index) => (
-          <MessageComponent message={message} key={index} user={user} />
+          <MessageComponent message={message} key={message._id} user={user} />
         ))}
       </Stack>
       <form
@@ -159,6 +169,7 @@ const Chat = ({ chatId }) => {
         >
           <IconButton
             onClick={handleFileOpen}
+            disabled={uploadingLoader}
             sx={{
               rotate: "30deg",
             }}
@@ -171,9 +182,8 @@ const Chat = ({ chatId }) => {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             sx={{
-              width: "100%",
               padding: "1rem",
-              borderRadius: "8px",
+              borderRadius: "250px",
               backgroundColor: "white",
               boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.1)",
             }}
@@ -197,7 +207,7 @@ const Chat = ({ chatId }) => {
         </Stack>
       </form>
 
-      <FileMenu anchorE1={fileMenuAnchor} />
+      <FileMenu anchorE1={fileMenuAnchor} chatId={chatId} />
     </Fragment>
   );
 };
