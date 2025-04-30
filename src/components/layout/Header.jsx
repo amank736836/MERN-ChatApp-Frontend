@@ -10,6 +10,7 @@ import {
 import {
   AppBar,
   Backdrop,
+  Badge,
   Box,
   IconButton,
   Toolbar,
@@ -29,6 +30,7 @@ import {
   setIsNotification,
   setIsSearch,
 } from "../../redux/reducers/misc";
+import { resetNotificationCount } from "../../redux/reducers/chat";
 
 const SearchDialog = lazy(() => import("../../specific/Search"));
 const NotificationsDialog = lazy(() => import("../../specific/Notifications"));
@@ -42,6 +44,8 @@ const Header = () => {
     (state) => state.misc
   );
 
+  const { notificationCount } = useSelector((state) => state.chat);
+
   const openMobile = () => {
     dispatch(setIsMobile(true));
   };
@@ -52,6 +56,7 @@ const Header = () => {
 
   const openNotification = () => {
     dispatch(setIsNotification(true));
+    dispatch(resetNotificationCount());
   };
 
   const openNewGroup = () => {
@@ -131,6 +136,7 @@ const Header = () => {
               title="Notifications"
               onClick={openNotification}
               icon={<NotificationsIcon />}
+              value={notificationCount}
             />
             <IconBtn
               title="Manage Groups"
@@ -168,7 +174,7 @@ const Header = () => {
   );
 };
 
-const IconBtn = ({ title, onClick, icon }) => {
+const IconBtn = ({ title, onClick, icon, value }) => {
   return (
     <Tooltip title={title} arrow>
       <IconButton
@@ -183,7 +189,13 @@ const IconBtn = ({ title, onClick, icon }) => {
           },
         }}
       >
-        {icon}
+        {value ? (
+          <Badge color="error" badgeContent={value}>
+            {icon}
+          </Badge>
+        ) : (
+          icon
+        )}
       </IconButton>
     </Tooltip>
   );
