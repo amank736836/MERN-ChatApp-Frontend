@@ -10,7 +10,7 @@ const ChatItem = ({
   groupChat = false,
   sameSender = false,
   isOnline = false,
-  newMessageAlert = 2,
+  newMessageCount = 0,
   index = 0,
   handleDeleteChat,
 }) => {
@@ -39,8 +39,8 @@ const ChatItem = ({
         <AvatarCard avatar={avatar} />
         <Stack>
           <Typography>{name}</Typography>
-          {newMessageAlert && (
-            <Typography>{newMessageAlert.count} New Messages</Typography>
+          {newMessageCount > 0 && (
+            <Typography>{newMessageCount} New Messages</Typography>
           )}
         </Stack>
 
