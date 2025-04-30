@@ -2,20 +2,17 @@ import { Stack } from "@mui/material";
 import React from "react";
 import ChatItem from "../components/shared/ChatItem";
 import { gradientBg } from "../constants/color";
+import { useSelector } from "react-redux";
 
 const ChatList = ({
   w = "100%",
   chats = [],
   chatId,
   onlineUsers = [],
-  newMessagesAlert = [
-    {
-      chatId: "",
-      count: 0,
-    },
-  ],
   handleDeleteChat,
 }) => {
+  const { newMessagesAlert } = useSelector((state) => state.chat);
+
   return (
     <Stack
       height={"100%"}
@@ -23,7 +20,10 @@ const ChatList = ({
       direction={"column"}
       spacing={2}
       sx={{
-        p: 2,
+        p: {
+          xs: "0.5rem",
+          sm: "1rem",
+        },
         background: gradientBg,
         boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
         "&::-webkit-scrollbar": {
@@ -35,10 +35,10 @@ const ChatList = ({
       {chats.map((data, index) => {
         const { _id, avatar, name, groupChat, members = [] } = data;
 
-
-        const newMessageAlert = newMessagesAlert.find(
+        const newMessageCount = newMessagesAlert.find(
           ({ chatId }) => chatId === _id
         );
+
 
         const isOnline = members?.some(({ member }) =>
           onlineUsers.includes(member)
@@ -47,7 +47,7 @@ const ChatList = ({
         return (
           <ChatItem
             index={index}
-            newMessageAlert={newMessageAlert}
+            newMessageCount={newMessageCount?.count || 0}
             isOnline={isOnline}
             avatar={avatar}
             name={name}
