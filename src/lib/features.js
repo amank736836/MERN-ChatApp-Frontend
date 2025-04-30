@@ -30,7 +30,9 @@ const fileFormat = (url = "") => {
 };
 
 const transformImageUrl = (url = "", width = 100) => {
-  return url;
+  const newUrl = url.replace("upload", `upload/dpr_auto/w_${width}`);
+
+  return newUrl;
 };
 
 const getLast7Days = () => {
