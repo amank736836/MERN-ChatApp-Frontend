@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material";
 import React, { memo } from "react";
 import { lightBlue } from "../../constants/color";
 import moment from "moment";
-import { fileFormat } from "../../lib/features";
+import { fileFormat, transformImageUrl } from "../../lib/features";
 import RenderAttachment from "./RenderAttachment";
 
 const MessageComponent = ({ message, user }) => {
@@ -28,7 +28,7 @@ const MessageComponent = ({ message, user }) => {
           {sender.name}
         </Typography>
       )}
-      {content && <Typography>{content}</Typography>}
+
       {attachments.length > 0 &&
         attachments.map((attachment, index) => {
           const url = attachment.url;
@@ -48,6 +48,8 @@ const MessageComponent = ({ message, user }) => {
             </Box>
           );
         })}
+
+      {content && <Typography>{content}</Typography>}
 
       <Typography variant="caption" color={isSender ? "white" : "black"}>
         {timeAgo}
