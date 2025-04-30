@@ -24,15 +24,6 @@ const api = createApi({
       }),
       providesTags: ["User"],
     }),
-    sendFriendRequest: builder.mutation({
-      query: (userId) => ({
-        url: `/user/sendRequest`,
-        body: { userId },
-        method: "PUT",
-        credentials: "include",
-      }),
-      invalidatesTags: ["User"],
-    }),
     getNotifications: builder.query({
       query: () => ({
         url: "/user/notifications",
@@ -40,15 +31,7 @@ const api = createApi({
       }),
       keepUnusedDataFor: 0,
     }),
-    acceptFriendRequest: builder.mutation({
-      query: (data) => ({
-        url: `/user/acceptRequest`,
-        body: data,
-        method: "PUT",
-        credentials: "include",
-      }),
-      invalidatesTags: ["Chat"],
-    }),
+
     getChatDetails: builder.query({
       query: ({ chatId, populate = false }) => ({
         url: `/chat/${chatId}`,
@@ -65,8 +48,34 @@ const api = createApi({
         method: "GET",
         credentials: "include",
       }),
-      providesTags: ["Message"],
       keepUnusedDataFor: 0,
+    }),
+    sendFriendRequest: builder.mutation({
+      query: (userId) => ({
+        url: `/user/sendRequest`,
+        body: { userId },
+        method: "PUT",
+        credentials: "include",
+      }),
+      invalidatesTags: ["User"],
+    }),
+    acceptFriendRequest: builder.mutation({
+      query: (data) => ({
+        url: `/user/acceptRequest`,
+        body: data,
+        method: "PUT",
+        credentials: "include",
+      }),
+      invalidatesTags: ["Chat"],
+    }),
+    sendAttachments: builder.mutation({
+      query: (data) => ({
+        url: "/chat/message",
+        method: "POST",
+        body: data,
+        credentials: "include",
+      }),
+      invalidatesTags: ["Message"],
     }),
   }),
 });
@@ -76,9 +85,10 @@ export default api;
 export const {
   useMyChatsQuery,
   useLazySearchUserQuery,
-  useSendFriendRequestMutation,
   useGetNotificationsQuery,
-  useAcceptFriendRequestMutation,
   useGetChatDetailsQuery,
   useGetMessagesQuery,
+  useSendFriendRequestMutation,
+  useAcceptFriendRequestMutation,
+  useSendAttachmentsMutation,
 } = api;
