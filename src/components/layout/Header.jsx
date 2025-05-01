@@ -18,19 +18,19 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import React, { lazy, Suspense, useState } from "react";
+import React, { lazy, Suspense } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { server } from "../../constants/config";
 import { userNotExists } from "../../redux/reducers/auth";
+import { resetNotificationCount } from "../../redux/reducers/chat";
 import {
   setIsMobile,
   setIsNewGroup,
   setIsNotification,
   setIsSearch,
 } from "../../redux/reducers/misc";
-import { resetNotificationCount } from "../../redux/reducers/chat";
 
 const SearchDialog = lazy(() => import("../../specific/Search"));
 const NotificationsDialog = lazy(() => import("../../specific/Notifications"));
