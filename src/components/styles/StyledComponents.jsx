@@ -76,10 +76,6 @@ const BouncingSkeleton = styled(Skeleton)({
 });
 
 export {
-  StyledLink,
-  InputBox,
-  SearchField,
-  CurveButton,
-  VisuallyHiddenInput,
-  BouncingSkeleton,
+  BouncingSkeleton, CurveButton, InputBox,
+  SearchField, StyledLink, VisuallyHiddenInput
 };
