@@ -1,6 +1,6 @@
+import { FileOpen as FileOpenIcon } from "@mui/icons-material";
 import React from "react";
 import { transformImageUrl } from "../../lib/features";
-import { FileOpen as FileOpenIcon } from "@mui/icons-material";
 
 const RenderAttachment = (fileType, url) => {
   switch (fileType) {
