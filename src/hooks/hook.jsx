@@ -83,4 +83,4 @@ const useSocketEvents = (socket, handlers) => {
   }, [handlers]);
 };
 
-export { useErrors, useAsyncMutation, useSocketEvents };
+export { useAsyncMutation, useErrors, useSocketEvents };
