@@ -1,19 +1,19 @@
 import { useInputValidation } from "6pp";
 import {
+  Box,
   Button,
   Dialog,
   DialogTitle,
   Stack,
   TextField,
   Typography,
-  Box,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import UserItem from "../components/shared/UserItem";
+import { dialogBg } from "../constants/color";
 import { sampleUsers } from "../constants/sampleData";
 import { usernameValidator } from "../lib/validators";
-import { dialogBg } from "../constants/color";
-import { useDispatch, useSelector } from "react-redux";
 import { setIsNewGroup } from "../redux/reducers/misc";
 
 const NewGroup = () => {
