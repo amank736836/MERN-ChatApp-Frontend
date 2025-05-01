@@ -7,8 +7,7 @@ import {
   LinearScale,
   LineElement,
   PointElement,
-  scales,
-  Tooltip,
+  Tooltip
 } from "chart.js";
 import React from "react";
 import { Doughnut, Line } from "react-chartjs-2";
@@ -108,4 +107,5 @@ const DoughnutChart = ({ value = [], labels = [] }) => {
   );
 };
 
-export { LineChart, DoughnutChart };
+export { DoughnutChart, LineChart };
+
