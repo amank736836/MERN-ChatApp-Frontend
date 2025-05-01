@@ -6,14 +6,21 @@ const fileFormat = (url = "") => {
   if (
     fileExtension === "mp4" ||
     fileExtension === "webm" ||
-    fileExtension === "ogg"
+    fileExtension === "mkv" ||
+    fileExtension === "avi" ||
+    fileExtension === "mov" ||
+    fileExtension === "flv" ||
+    fileExtension === "wmv"
   ) {
     return "video";
   }
   if (
     fileExtension === "mp3" ||
     fileExtension === "wav" ||
-    fileExtension === "aac"
+    fileExtension === "aac" ||
+    fileExtension === "m4a" ||
+    fileExtension === "flac" ||
+    fileExtension === "mpeg"
   ) {
     return "audio";
   }
@@ -21,7 +28,8 @@ const fileFormat = (url = "") => {
     fileExtension === "jpg" ||
     fileExtension === "jpeg" ||
     fileExtension === "png" ||
-    fileExtension === "gif"
+    fileExtension === "gif" ||
+    fileExtension === "webp"
   ) {
     return "image";
   }
@@ -45,4 +53,14 @@ const getLast7Days = () => {
   return last7Days;
 };
 
-export { fileFormat, transformImageUrl, getLast7Days };
+const getOrSaveFromStorage = ({ key, value, get }) => {
+  if (get) {
+    return localStorage.getItem(key)
+      ? JSON.parse(localStorage.getItem(key))
+      : null;
+  } else if (value) {
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+};
+
+export { fileFormat, transformImageUrl, getLast7Days, getOrSaveFromStorage };
