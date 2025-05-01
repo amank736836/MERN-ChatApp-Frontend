@@ -1,6 +1,7 @@
-import { Grid, Skeleton, Stack } from "@mui/material";
+import { Grid, Skeleton, Stack, Typography } from "@mui/material";
+import { BouncingSkeleton } from "../styles/StyledComponents";
 
-export const LayoutLoader = () => {
+const LayoutLoader = () => {
   return (
     <Grid
       container
@@ -48,3 +49,65 @@ export const LayoutLoader = () => {
     </Grid>
   );
 };
+
+const TypingLoader = ({ username }) => {
+  return (
+    <Stack
+      spacing={"0.5rem"}
+      direction={"row"}
+      alignItems={"center"}
+      justifyContent={"flex-start"}
+      padding={"0.5rem"}
+    >
+      <Typography
+        variant="body2"
+        fontSize={"0.8rem"}
+        color={"#888"}
+        fontWeight={500}
+        sx={{
+          fontFamily: "Poppins",
+        }}
+      >
+        {username} typing
+      </Typography>
+      <BouncingSkeleton
+        variant="circular"
+        width={10}
+        height={10}
+        style={{
+          animationDelay: "0.1s",
+          background: "linear-gradient(45deg, #f3ec78, #af4261)",
+        }}
+      />
+      <BouncingSkeleton
+        variant="circular"
+        width={10}
+        height={10}
+        style={{
+          animationDelay: "0.2s",
+          background: "linear-gradient(45deg, #f3ec78, #af4261)",
+        }}
+      />
+      <BouncingSkeleton
+        variant="circular"
+        width={10}
+        height={10}
+        style={{
+          animationDelay: "0.4s",
+          background: "linear-gradient(45deg, #f3ec78, #af4261)",
+        }}
+      />
+      <BouncingSkeleton
+        variant="circular"
+        width={10}
+        height={10}
+        style={{
+          animationDelay: "0.6s",
+          background: "linear-gradient(45deg, #f3ec78, #af4261)",
+        }}
+      />
+    </Stack>
+  );
+};
+
+export { LayoutLoader, TypingLoader };
