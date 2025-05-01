@@ -1,5 +1,5 @@
 import { Drawer, Grid, Skeleton, Stack } from "@mui/material";
-import React, { lazy, useCallback } from "react";
+import React, { lazy, useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { gradientBg } from "../../constants/color";
@@ -14,16 +14,26 @@ import { setIsMobile } from "../../redux/reducers/misc";
 import { getSocket } from "../../socket";
 import Title from "../shared/Title";
 import Header from "./Header";
+import { getOrSaveFromStorage } from "../../lib/features";
 
 const ChatList = lazy(() => import("../../specific/ChatList"));
 const Profile = lazy(() => import("../../specific/Profile"));
 
 const AppLayout = () => (WrappedComponent) => {
   return (props) => {
-    const { isMobile } = useSelector((state) => state.misc);
-
     const dispatch = useDispatch();
     const socket = getSocket();
+
+    const { newMessagesAlert } = useSelector((state) => state.chat);
+
+    useEffect(() => {
+      getOrSaveFromStorage({
+        key: NEW_MESSAGE_ALERT,
+        value: newMessagesAlert,
+      });
+    }, [newMessagesAlert]);
+
+    const { isMobile } = useSelector((state) => state.misc);
 
     const handleMobileClose = () => {
       dispatch(setIsMobile(false));
@@ -97,6 +107,7 @@ const AppLayout = () => (WrappedComponent) => {
               chatId={chatId}
               onlineUsers={["1", "2"]}
               handleDeleteChat={handleDeleteChat}
+              newMessagesAlert={newMessagesAlert}
             />
           </Drawer>
         )}
