@@ -1,8 +1,8 @@
 import { Box, Typography } from "@mui/material";
+import moment from "moment";
 import React, { memo } from "react";
 import { lightBlue } from "../../constants/color";
-import moment from "moment";
-import { fileFormat, transformImageUrl } from "../../lib/features";
+import { fileFormat } from "../../lib/features";
 import RenderAttachment from "./RenderAttachment";
 
 const MessageComponent = ({ message, user }) => {
