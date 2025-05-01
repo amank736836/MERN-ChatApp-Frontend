@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getOrSaveFromStorage } from "../../lib/features";
 import { NEW_MESSAGE_ALERT } from "../../constants/events";
+import { getOrSaveFromStorage } from "../../lib/features";
 
 const initialState = {
   notificationCount: 0,
