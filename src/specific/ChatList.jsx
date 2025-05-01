@@ -10,9 +10,8 @@ const ChatList = ({
   chatId,
   onlineUsers = [],
   handleDeleteChat,
+  newMessagesAlert = [],
 }) => {
-  const { newMessagesAlert } = useSelector((state) => state.chat);
-
   return (
     <Stack
       height={"100%"}
@@ -38,7 +37,6 @@ const ChatList = ({
         const newMessageCount = newMessagesAlert.find(
           ({ chatId }) => chatId === _id
         );
-
 
         const isOnline = members?.some(({ member }) =>
           onlineUsers.includes(member)
