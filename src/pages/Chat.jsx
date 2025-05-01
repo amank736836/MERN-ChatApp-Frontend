@@ -14,6 +14,7 @@ import React, {
 import { useDispatch, useSelector } from "react-redux";
 import FileMenu from "../components/dialog/FileMenu";
 import AppLayout from "../components/layout/AppLayout";
+import { TypingLoader } from "../components/layout/Loaders";
 import MessageComponent from "../components/shared/MessageComponent";
 import { InputBox } from "../components/styles/StyledComponents";
 import { grayColor, orange } from "../constants/color";
@@ -25,10 +26,9 @@ import {
 } from "../constants/events";
 import { useErrors, useSocketEvents } from "../hooks/hook";
 import { useGetChatDetailsQuery, useGetMessagesQuery } from "../redux/api/api";
+import { removeNewMessagesAlert } from "../redux/reducers/chat";
 import { setIsFileMenu } from "../redux/reducers/misc";
 import { getSocket } from "../socket";
-import { removeNewMessagesAlert } from "../redux/reducers/chat";
-import { TypingLoader } from "../components/layout/Loaders";
 
 const Chat = ({ chatId }) => {
   const { user } = useSelector((state) => state.auth);
@@ -124,21 +124,23 @@ const Chat = ({ chatId }) => {
     }, 2000);
   };
 
-  const alertHandler = useCallback((data) => {
-    if (data.chatId !== chatId) return;
-    const messageForAlert = {
-      content: data.message,
-      sender: {
-        _id: "system",
-        name: "System",
-      },
-      chat: chatId,
-      createdAt: new Date().toISOString(),
-    };
+  const alertHandler = useCallback(
+    (data) => {
+      if (data.chatId !== chatId) return;
+      const messageForAlert = {
+        content: data.message,
+        sender: {
+          _id: "system",
+          name: "System",
+        },
+        chat: chatId,
+        createdAt: new Date().toISOString(),
+      };
 
-    setMessages((prevMessages) => [...prevMessages, messageForAlert]);
-
-  }, [chatId]);
+      setMessages((prevMessages) => [...prevMessages, messageForAlert]);
+    },
+    [chatId]
+  );
 
   const newMessagesHandler = useCallback(
     (data) => {
