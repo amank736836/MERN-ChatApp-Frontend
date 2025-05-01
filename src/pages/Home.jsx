@@ -1,6 +1,6 @@
+import { Box, Stack, Typography } from "@mui/material";
 import React from "react";
 import AppLayout from "../components/layout/AppLayout";
-import { Stack, Typography, Box } from "@mui/material";
 import { gradientBg } from "../constants/color";
 
 const Home = () => {
