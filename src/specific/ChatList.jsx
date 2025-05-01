@@ -2,7 +2,6 @@ import { Stack } from "@mui/material";
 import React from "react";
 import ChatItem from "../components/shared/ChatItem";
 import { gradientBg } from "../constants/color";
-import { useSelector } from "react-redux";
 
 const ChatList = ({
   w = "100%",
