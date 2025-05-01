@@ -14,12 +14,12 @@ import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import UserItem from "../components/shared/UserItem";
 import { dialogBg } from "../constants/color";
+import { useAsyncMutation } from "../hooks/hook";
 import {
   useLazySearchUserQuery,
   useSendFriendRequestMutation,
 } from "../redux/api/api";
 import { setIsSearch } from "../redux/reducers/misc";
-import { useAsyncMutation } from "../hooks/hook";
 
 const Search = () => {
   const { isSearch } = useSelector((state) => state.misc);
