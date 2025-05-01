@@ -6,10 +6,10 @@ import {
 } from "@mui/icons-material";
 import { ListItemText, Menu, MenuItem, MenuList, Tooltip } from "@mui/material";
 import React, { useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setIsFileMenu, setUploadingLoader } from "../../redux/reducers/misc";
-import { useSendAttachmentsMutation } from "../../redux/api/api";
 import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { useSendAttachmentsMutation } from "../../redux/api/api";
+import { setIsFileMenu, setUploadingLoader } from "../../redux/reducers/misc";
 
 const FileMenu = ({ anchorE1, chatId }) => {
   const dispatch = useDispatch();
