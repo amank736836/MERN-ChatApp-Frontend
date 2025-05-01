@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { gradientBg } from "../../constants/color";
 import { NEW_MESSAGE_ALERT, NEW_REQUEST } from "../../constants/events";
 import { useErrors, useSocketEvents } from "../../hooks/hook";
+import { getOrSaveFromStorage } from "../../lib/features";
 import { useMyChatsQuery } from "../../redux/api/api";
 import {
   incrementNotificationCount,
@@ -14,7 +15,6 @@ import { setIsMobile } from "../../redux/reducers/misc";
 import { getSocket } from "../../socket";
 import Title from "../shared/Title";
 import Header from "./Header";
-import { getOrSaveFromStorage } from "../../lib/features";
 
 const ChatList = lazy(() => import("../../specific/ChatList"));
 const Profile = lazy(() => import("../../specific/Profile"));
