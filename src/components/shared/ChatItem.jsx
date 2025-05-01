@@ -1,6 +1,6 @@
+import { Box, Stack, Typography } from "@mui/material";
 import React, { memo } from "react";
 import { StyledLink } from "../styles/StyledComponents";
-import { Box, Stack, Typography } from "@mui/material";
 import AvatarCard from "./AvatarCard";
 
 const ChatItem = ({
