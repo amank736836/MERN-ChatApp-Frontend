@@ -141,7 +141,7 @@ const FileMenu = ({ anchorE1, chatId }) => {
             <input
               ref={audioRef}
               type="file"
-              accept="audio/mpeg, audio/wav, audio/mp3, audio/ogg, audio/aac, audio/m4a, audio/flac"
+              accept="audio/mpeg, audio/wav, audio/mp3, audio/aac, audio/m4a, audio/flac"
               multiple
               style={{
                 display: "none",
@@ -157,7 +157,7 @@ const FileMenu = ({ anchorE1, chatId }) => {
             <input
               ref={videoRef}
               type="file"
-              accept="video/mp4, video/webm, video/mkv, video/avi, video/mov, video/ogg, video/flv, video/wmv"
+              accept="video/mp4, video/webm, video/mkv, video/avi, video/mov, video/flv, video/wmv"
               multiple
               style={{
                 display: "none",
