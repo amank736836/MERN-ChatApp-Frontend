@@ -63,4 +63,4 @@ const getOrSaveFromStorage = ({ key, value, get }) => {
   }
 };
 
-export { fileFormat, transformImageUrl, getLast7Days, getOrSaveFromStorage };
+export { fileFormat, getLast7Days, getOrSaveFromStorage, transformImageUrl };
