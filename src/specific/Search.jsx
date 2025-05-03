@@ -14,12 +14,12 @@ import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import UserItem from "../components/shared/UserItem";
 import { dialogBg } from "../constants/color";
-import { useAsyncMutation } from "../hooks/hook";
+import { useAsyncMutation, useErrors } from "../hooks/hook";
 import {
   useLazySearchUserQuery,
   useSendFriendRequestMutation,
 } from "../redux/api/api";
-import { setIsSearch } from "../redux/reducers/misc";
+import { setIsSearch } from "../redux/reducers/misc.reducer";
 
 const Search = () => {
   const { isSearch } = useSelector((state) => state.misc);
@@ -30,10 +30,18 @@ const Search = () => {
     dispatch(setIsSearch(false));
   };
 
+  const [users, setUsers] = useState([]);
+
   const search = useInputValidation("");
 
-  const [searchUser, { isLoading: isLoadingSearchUser, error }] =
-    useLazySearchUserQuery(search.value);
+  const [
+    searchUser,
+    {
+      isLoading: isLoadingSearchUser,
+      isError: isErrorSearchUser,
+      error: errorSearchUser,
+    },
+  ] = useLazySearchUserQuery(search.value);
 
   const [
     sendFriendRequest,
@@ -44,7 +52,16 @@ const Search = () => {
     },
   ] = useAsyncMutation(useSendFriendRequestMutation);
 
-  const [users, setUsers] = useState([]);
+  useErrors([
+    {
+      isError: sendFriendRequestError,
+      error: sendFriendRequestErrorData,
+    },
+    {
+      isError: isErrorSearchUser,
+      error: errorSearchUser,
+    },
+  ]);
 
   const sendFriendRequestHandler = async (userId) => {
     if (!userId) return;
@@ -146,7 +163,7 @@ const Search = () => {
                 sx={{ borderRadius: "8px" }}
               />
             </Box>
-          ) : error ? (
+          ) : errorSearchUser ? (
             <Box
               key={"errorFetchingUsers"}
               sx={{
