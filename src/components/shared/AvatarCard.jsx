@@ -25,7 +25,7 @@ const AvatarCard = ({ avatar = [], max = 3 }) => {
                   height: "3rem",
                   position: "absolute",
                   left: {
-                    xs: `${index + 0.5}rem`,
+                    xs: `${index}rem`,
                     sm: `${index - 0.5}rem`,
                   },
                   border: "2px solid white",
