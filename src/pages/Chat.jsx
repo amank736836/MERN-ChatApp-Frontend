@@ -12,6 +12,7 @@ import React, {
   useState,
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import FileMenu from "../components/dialog/FileMenu";
 import AppLayout from "../components/layout/AppLayout";
 import { TypingLoader } from "../components/layout/Loaders";
@@ -26,16 +27,13 @@ import {
 } from "../constants/events";
 import { useErrors, useSocketEvents } from "../hooks/hook";
 import { useGetChatDetailsQuery, useGetMessagesQuery } from "../redux/api/api";
-import { removeNewMessagesAlert } from "../redux/reducers/chat";
-import { setIsFileMenu } from "../redux/reducers/misc";
+import { removeNewMessagesAlert } from "../redux/reducers/chat.reducer";
+import { setIsFileMenu } from "../redux/reducers/misc.reducer";
 import { getSocket } from "../socket";
 
 const Chat = ({ chatId }) => {
   const { user } = useSelector((state) => state.auth);
   const { uploadingLoader } = useSelector((state) => state.misc);
-
-  const socket = getSocket();
-  const dispatch = useDispatch();
 
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -48,21 +46,20 @@ const Chat = ({ chatId }) => {
   const containerRef = useRef(null);
   const bottomRef = useRef(null);
 
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const handleFileOpen = (e) => {
     dispatch(setIsFileMenu(true));
     setFileMenuAnchor(e.currentTarget);
   };
+  const socket = getSocket();
 
   const {
     data: chatDetails,
     isLoading: isLoadingChatDetails,
     isError: isErrorChatDetails,
     error: errorChatDetails,
-  } = useGetChatDetailsQuery({
-    chatId,
-    skip: !chatId,
-    populate: true,
-  });
+  } = useGetChatDetailsQuery({ chatId, populate: true }, { skip: !chatId });
 
   const {
     data: oldMessagesChunks,
@@ -96,7 +93,9 @@ const Chat = ({ chatId }) => {
 
   const allMessages = [...oldMessages, ...messages];
 
-  const members = chatDetails?.chat.members;
+  const chatMembers = chatDetails?.chat.members || [];
+
+  const members = chatDetails?.chat.members.map((member) => member._id) || [];
 
   const messageChangeHandler = (e) => {
     setMessage(e.target.value);
@@ -124,13 +123,29 @@ const Chat = ({ chatId }) => {
     }, 2000);
   };
 
+  const submitHandler = (e) => {
+    e.preventDefault();
+    if (!message.trim()) return;
+    socket.emit(NEW_MESSAGE, {
+      message,
+      chatId,
+      members,
+    });
+    socket.emit(STOP_TYPING, {
+      members,
+      chatId,
+      senderId: user._id,
+    });
+    setMessage("");
+  };
+
   const alertHandler = useCallback(
     (data) => {
       if (data.chatId !== chatId) return;
       const messageForAlert = {
         content: data.message,
         sender: {
-          _id: "system",
+          _id: Date.now(),
           name: "System",
         },
         chat: chatId,
@@ -142,7 +157,7 @@ const Chat = ({ chatId }) => {
     [chatId]
   );
 
-  const newMessagesHandler = useCallback(
+  const newMessagesListener = useCallback(
     (data) => {
       if (data.chatId !== chatId) return;
       setMessages((prevMessages) => [...prevMessages, data.message]);
@@ -150,51 +165,38 @@ const Chat = ({ chatId }) => {
     [chatId]
   );
 
-  const startTypingHandler = useCallback(
+  const startTypingListener = useCallback(
     (data) => {
       if (data.chatId !== chatId) return;
       const { senderId } = data;
-      const member = members?.find((member) => member._id === senderId);
+      const member = chatMembers?.find((member) => member._id === senderId);
       if (member) {
-        console.log(`${member.name} is typing...`);
         setUserNameTyping(member.name);
       }
     },
-    [chatId]
+    [chatId, chatMembers]
   );
 
-  const stopTypingHandler = useCallback(
+  const stopTypingListener = useCallback(
     (data) => {
       if (data.chatId !== chatId) return;
       const { senderId } = data;
-      const member = members?.find((member) => member._id === senderId);
+      const member = chatMembers?.find((member) => member._id === senderId);
       if (member) {
-        console.log(`${member.name} stopped typing...`);
         setUserNameTyping(null);
       }
     },
-    [chatId]
+    [chatId, chatMembers]
   );
 
   const eventHandler = {
     [ALERT]: alertHandler,
-    [NEW_MESSAGE]: newMessagesHandler,
-    [START_TYPING]: startTypingHandler,
-    [STOP_TYPING]: stopTypingHandler,
+    [NEW_MESSAGE]: newMessagesListener,
+    [START_TYPING]: startTypingListener,
+    [STOP_TYPING]: stopTypingListener,
   };
 
   useSocketEvents(socket, eventHandler);
-
-  const submitHandler = (e) => {
-    e.preventDefault();
-    if (!message.trim()) return;
-    socket.emit(NEW_MESSAGE, {
-      message,
-      chatId,
-      members,
-    });
-    setMessage("");
-  };
 
   useEffect(() => {
     if (bottomRef.current) {
@@ -212,6 +214,12 @@ const Chat = ({ chatId }) => {
       setMessage("");
     };
   }, [chatId]);
+
+  useEffect(() => {
+    if (isErrorOldMessages || isErrorChatDetails) {
+      navigate("/");
+    }
+  }, [isErrorOldMessages, isErrorChatDetails]);
 
   return isLoadingChatDetails ? (
     <Stack
@@ -242,9 +250,44 @@ const Chat = ({ chatId }) => {
           },
         }}
       >
-        {allMessages.map((message, index) => (
-          <MessageComponent message={message} key={message._id} user={user} />
-        ))}
+        {allMessages.length === 0 ? (
+          <Stack
+            sx={{
+              width: "100%",
+              height: "100%",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            spacing={"1rem"}
+          >
+            <h1
+              style={{
+                fontSize: "2rem",
+                color: "black",
+              }}
+            >
+              No Messages Yet
+            </h1>
+            <h2
+              style={{
+                fontSize: "1.5rem",
+                color: "black",
+              }}
+            >
+              Start the conversation
+            </h2>
+          </Stack>
+        ) : (
+          <>
+            {allMessages.map((message) => (
+              <MessageComponent
+                message={message}
+                key={message._id}
+                user={user}
+              />
+            ))}
+          </>
+        )}
         {userNameTyping && <TypingLoader username={userNameTyping} />}
         <div ref={bottomRef} />
       </Stack>
