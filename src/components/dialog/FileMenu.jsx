@@ -8,8 +8,12 @@ import { ListItemText, Menu, MenuItem, MenuList, Tooltip } from "@mui/material";
 import React, { useRef } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
+import { useErrors } from "../../hooks/hook";
 import { useSendAttachmentsMutation } from "../../redux/api/api";
-import { setIsFileMenu, setUploadingLoader } from "../../redux/reducers/misc";
+import {
+  setIsFileMenu,
+  setUploadingLoader,
+} from "../../redux/reducers/misc.reducer";
 
 const FileMenu = ({ anchorE1, chatId }) => {
   const dispatch = useDispatch();
@@ -18,6 +22,11 @@ const FileMenu = ({ anchorE1, chatId }) => {
   const closeFileMenu = () => {
     dispatch(setIsFileMenu(false));
   };
+
+  const imageRef = useRef(null);
+  const audioRef = useRef(null);
+  const videoRef = useRef(null);
+  const fileRef = useRef(null);
 
   const [
     sendAttachments,
@@ -28,10 +37,12 @@ const FileMenu = ({ anchorE1, chatId }) => {
     },
   ] = useSendAttachmentsMutation();
 
-  const imageRef = useRef(null);
-  const audioRef = useRef(null);
-  const videoRef = useRef(null);
-  const fileRef = useRef(null);
+  useErrors([
+    {
+      isError: isErrorSendAttachments,
+      error: errorSendAttachments,
+    },
+  ]);
 
   const selectImage = () => {
     imageRef.current?.click();
