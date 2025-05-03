@@ -48,7 +48,6 @@ const Profile = () => {
           alt="Profile Avatar"
         />
         <ProfileCard heading="Name" text={user?.name} Icon={<FaceIcon />} />
-        <ProfileCard heading="Bio" text={user?.bio} />
         <ProfileCard
           heading="Username"
           text={user?.username}
