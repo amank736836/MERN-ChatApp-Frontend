@@ -11,27 +11,32 @@ import {
   Typography,
 } from "@mui/material";
 import React, { memo, useEffect, useState } from "react";
-import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { dialogBg } from "../constants/color";
-import { useErrors } from "../hooks/hook";
+import { useAsyncMutation, useErrors } from "../hooks/hook";
 import { transformImageUrl } from "../lib/features";
 import {
   useAcceptFriendRequestMutation,
   useGetNotificationsQuery,
 } from "../redux/api/api";
-import { setIsNotification } from "../redux/reducers/misc";
+import { setIsNotification } from "../redux/reducers/misc.reducer";
 
 const Notifications = () => {
   const { isNotification } = useSelector((state) => state.misc);
 
+  const [notification, setNotification] = useState([]);
+
   const dispatch = useDispatch();
 
-  const closeNotification = () => {
-    dispatch(setIsNotification(false));
-  };
-
-  const [notification, setNotification] = useState([]);
+  const [
+    acceptFriendRequest,
+    {
+      data: acceptFriendRequestData,
+      isLoading: isLoadingAcceptFriendRequest,
+      isError: isErrorAcceptFriendRequest,
+      error: errorAcceptFriendRequest,
+    },
+  ] = useAsyncMutation(useAcceptFriendRequestMutation);
 
   const {
     data: notificationsData,
@@ -45,59 +50,39 @@ const Notifications = () => {
       isError: isErrorNotifications,
       error: errorNotifications,
     },
+    {
+      isError: isErrorAcceptFriendRequest,
+      error: errorAcceptFriendRequest,
+    },
   ]);
+
+  const closeNotification = () => {
+    dispatch(setIsNotification(false));
+  };
+
+  const friendRequestHandler = async ({ _id, accept }) => {
+    await acceptFriendRequest("Accepting Friend Request...", {
+      requestId: _id,
+      accept,
+    });
+  };
+
+  useEffect(() => {
+    if (acceptFriendRequestData?.success) {
+      setNotification((prev) =>
+        prev.filter(
+          (notification) =>
+            notification._id !== acceptFriendRequestData.senderId
+        )
+      );
+    }
+  }, [acceptFriendRequestData]);
 
   useEffect(() => {
     if (notificationsData) {
       setNotification(notificationsData.allRequests);
     }
   }, [notificationsData]);
-
-  const [
-    acceptFriendRequest,
-    {
-      isLoading: isLoadingAcceptFriendRequest,
-      isError: isErrorAcceptFriendRequest,
-      error: errorAcceptFriendRequest,
-    },
-  ] = useAcceptFriendRequestMutation();
-
-  const friendRequestHandler = async ({ _id, accept }) => {
-    const toastId = toast.loading("Accepting friend request...");
-    try {
-      const res = await acceptFriendRequest({
-        requestId: _id,
-        accept,
-      });
-
-      if (res.data?.success) {
-        toast.success(
-          res.data?.message || "Friend request accepted successfully",
-          {
-            id: toastId,
-            duration: 1000,
-          }
-        );
-        setNotification((prev) =>
-          prev.filter((notification) => notification._id !== _id)
-        );
-      } else if (res.error) {
-        toast.error(
-          res.error?.data?.message || "Error accepting friend request",
-          {
-            id: toastId,
-            duration: 1000,
-          }
-        );
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error(error?.message || "Error accepting friend request", {
-        id: toastId,
-        duration: 1000,
-      });
-    }
-  };
 
   return (
     <Dialog open={isNotification} onClose={closeNotification}>
