@@ -80,7 +80,8 @@ const useSocketEvents = (socket, handlers) => {
         socket.off(event);
       });
     };
-  }, [handlers]);
+  }, [handlers, socket]);
 };
 
 export { useAsyncMutation, useErrors, useSocketEvents };
+
