@@ -1,46 +1,50 @@
 import { Drawer, Grid, Skeleton, Stack } from "@mui/material";
-import React, { lazy, useCallback, useEffect } from "react";
+import React, { lazy, useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { gradientBg } from "../../constants/color";
-import { NEW_MESSAGE_ALERT, NEW_REQUEST } from "../../constants/events";
+import {
+  NEW_MESSAGE_ALERT,
+  NEW_REQUEST,
+  REFETCH_CHATS,
+} from "../../constants/events";
 import { useErrors, useSocketEvents } from "../../hooks/hook";
 import { getOrSaveFromStorage } from "../../lib/features";
-import { useMyChatsQuery } from "../../redux/api/api";
+import { useGetMyChatsQuery } from "../../redux/api/api";
 import {
   incrementNotificationCount,
   setNewMessagesAlert,
-} from "../../redux/reducers/chat";
-import { setIsMobile } from "../../redux/reducers/misc";
+} from "../../redux/reducers/chat.reducer";
+import {
+  setIsDeleteMenu,
+  setIsMobile,
+  setSelectedDeleteChat,
+} from "../../redux/reducers/misc.reducer";
 import { getSocket } from "../../socket";
+import DeleteChatMenu from "../dialog/DeleteChatMenu";
 import Title from "../shared/Title";
 import Header from "./Header";
+import toast from "react-hot-toast";
 
 const ChatList = lazy(() => import("../../specific/ChatList"));
 const Profile = lazy(() => import("../../specific/Profile"));
 
 const AppLayout = () => (WrappedComponent) => {
   return (props) => {
-    const dispatch = useDispatch();
-    const socket = getSocket();
-
     const { newMessagesAlert } = useSelector((state) => state.chat);
-
-    useEffect(() => {
-      getOrSaveFromStorage({
-        key: NEW_MESSAGE_ALERT,
-        value: newMessagesAlert,
-      });
-    }, [newMessagesAlert]);
-
     const { isMobile } = useSelector((state) => state.misc);
 
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const handleMobileClose = () => {
       dispatch(setIsMobile(false));
     };
 
     const params = useParams();
     const chatId = params.chatId || null;
+    const deleteOptionAnchor = useRef(null);
+
+    const socket = getSocket();
 
     const {
       data: chatsData,
@@ -48,7 +52,7 @@ const AppLayout = () => (WrappedComponent) => {
       isError: isErrorChats,
       error: errorChats,
       refetch: refetchChats,
-    } = useMyChatsQuery("");
+    } = useGetMyChatsQuery("");
 
     useErrors([
       {
@@ -57,12 +61,14 @@ const AppLayout = () => (WrappedComponent) => {
       },
     ]);
 
-    const handleDeleteChat = (e, _id, groupChat) => {
+    const handleDeleteChat = (e, chatId, groupChat) => {
       e.preventDefault();
-      console.log("Delete chat", _id, groupChat);
+      deleteOptionAnchor.current = e.currentTarget;
+      dispatch(setIsDeleteMenu(true));
+      dispatch(setSelectedDeleteChat({ chatId, groupChat }));
     };
 
-    const newMessagesAlertHandler = useCallback(
+    const newMessagesAlertListener = useCallback(
       (data) => {
         if (data.chatId === chatId) return;
         dispatch(setNewMessagesAlert(data));
@@ -70,21 +76,46 @@ const AppLayout = () => (WrappedComponent) => {
       [chatId]
     );
 
-    const newRequestHandler = useCallback(() => {
+    const newRequestListener = useCallback(() => {
       dispatch(incrementNotificationCount());
     }, [dispatch]);
 
+    const refetchChatsListener = useCallback(
+      (data) => {
+        if (data) {
+          toast.success(data, {
+            duration: 1000,
+          });
+        }
+        refetchChats();
+        navigate("/");
+      },
+      [refetchChats]
+    );
+
     const eventHandlers = {
-      [NEW_MESSAGE_ALERT]: newMessagesAlertHandler,
-      [NEW_REQUEST]: newRequestHandler,
+      [NEW_MESSAGE_ALERT]: newMessagesAlertListener,
+      [NEW_REQUEST]: newRequestListener,
+      [REFETCH_CHATS]: refetchChatsListener,
     };
 
     useSocketEvents(socket, eventHandlers);
+
+    useEffect(() => {
+      getOrSaveFromStorage({
+        key: NEW_MESSAGE_ALERT,
+        value: newMessagesAlert,
+      });
+    }, [newMessagesAlert]);
 
     return (
       <>
         <Title title="Chat App" description="This is the chat App" />
         <Header />
+        <DeleteChatMenu
+          deleteOptionAnchor={deleteOptionAnchor}
+          handleDeleteChat={handleDeleteChat}
+        />
         {isLoadingChats ? (
           <Skeleton />
         ) : (
@@ -105,9 +136,9 @@ const AppLayout = () => (WrappedComponent) => {
               w="80vw"
               chats={chatsData.chats}
               chatId={chatId}
+              newMessagesAlert={newMessagesAlert}
               onlineUsers={["1", "2"]}
               handleDeleteChat={handleDeleteChat}
-              newMessagesAlert={newMessagesAlert}
             />
           </Drawer>
         )}
@@ -133,7 +164,7 @@ const AppLayout = () => (WrappedComponent) => {
               <ChatList
                 chats={chatsData.chats}
                 chatId={chatId}
-                newMessagesAlert={[{ chatId, count: 2 }]}
+                newMessagesAlert={newMessagesAlert}
                 onlineUsers={["1", "2"]}
                 handleDeleteChat={handleDeleteChat}
               />
