@@ -23,14 +23,14 @@ import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { server } from "../../constants/config";
-import { userNotExists } from "../../redux/reducers/auth";
-import { resetNotificationCount } from "../../redux/reducers/chat";
+import { userNotExists } from "../../redux/reducers/auth.reducer";
+import { resetNotificationCount } from "../../redux/reducers/chat.reducer";
 import {
   setIsMobile,
   setIsNewGroup,
   setIsNotification,
   setIsSearch,
-} from "../../redux/reducers/misc";
+} from "../../redux/reducers/misc.reducer";
 
 const SearchDialog = lazy(() => import("../../specific/Search"));
 const NotificationsDialog = lazy(() => import("../../specific/Notifications"));
