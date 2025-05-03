@@ -19,7 +19,7 @@ import { VisuallyHiddenInput } from "../components/styles/StyledComponents";
 import { authBg } from "../constants/color";
 import { server } from "../constants/config";
 import { usernameValidator } from "../lib/validators";
-import { userExists } from "../redux/reducers/auth";
+import { userExists } from "../redux/reducers/auth.reducer";
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -32,12 +32,14 @@ const Login = () => {
   const password = useStrongPassword("");
   const confirmPassword = useStrongPassword("");
   const avatar = useFileHandler("single", 2);
+  const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     const config = {
       headers: {
@@ -81,11 +83,14 @@ const Login = () => {
         duration: 1000,
         id: toastId,
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleSignUp = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const formDate = new FormData();
     formDate.append("avatar", avatar.file);
     formDate.append("name", name.value);
@@ -102,9 +107,9 @@ const Login = () => {
         withCredentials: true,
       };
 
-      const res = await axios.post(`${server}/user/new`, formDate, config);
+      const { data } = await axios.post(`${server}/user/new`, formDate, config);
 
-      dispatch(userExists(true));
+      dispatch(userExists(data.user));
 
       toast.success("Sign up successful!", {
         duration: 1000,
@@ -121,10 +126,13 @@ const Login = () => {
           navigate("/");
         });
     } catch (error) {
+      console.log(error);
       toast.error(error?.response?.data?.message || "Sign up failed", {
         duration: 1000,
         id: toastId,
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -198,6 +206,7 @@ const Login = () => {
                   color="primary"
                   type="submit"
                   sx={{ mt: 2 }}
+                  disabled={isLoading}
                 >
                   Login
                 </Button>
@@ -210,6 +219,7 @@ const Login = () => {
                   color="secondary"
                   onClick={toggleLogin}
                   sx={{ mt: 2 }}
+                  disabled={isLoading}
                 >
                   Sign Up
                 </Button>
@@ -304,7 +314,9 @@ const Login = () => {
                   color="primary"
                   type="submit"
                   sx={{ mt: 2 }}
-                  disabled={password.value !== confirmPassword.value}
+                  disabled={
+                    password.value !== confirmPassword.value || isLoading
+                  }
                 >
                   Sign Up
                 </Button>
@@ -318,6 +330,7 @@ const Login = () => {
                 color="secondary"
                 onClick={toggleLogin}
                 sx={{ mt: 2 }}
+                disabled={isLoading}
               >
                 Login
               </Button>
