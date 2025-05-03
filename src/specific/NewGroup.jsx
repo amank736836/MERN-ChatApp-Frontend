@@ -4,6 +4,7 @@ import {
   Button,
   Dialog,
   DialogTitle,
+  Skeleton,
   Stack,
   TextField,
   Typography,
@@ -12,15 +13,68 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import UserItem from "../components/shared/UserItem";
 import { dialogBg } from "../constants/color";
-import { sampleUsers } from "../constants/sampleData";
-import { usernameValidator } from "../lib/validators";
-import { setIsNewGroup } from "../redux/reducers/misc";
+import { useAsyncMutation, useErrors } from "../hooks/hook";
+import {
+  useGetAvailableFriendsQuery,
+  useNewGroupMutation,
+} from "../redux/api/api";
+import { setIsNewGroup } from "../redux/reducers/misc.reducer";
 
 const NewGroup = () => {
-  const groupName = useInputValidation("", usernameValidator);
+  const { isNewGroup } = useSelector((state) => state.misc);
 
-  const [members, setMembers] = useState(sampleUsers);
+  const groupName = useInputValidation("");
+
+  const [members, setMembers] = useState([]);
   const [selectedMembers, setSelectedMembers] = useState([]);
+
+  const dispatch = useDispatch();
+
+  const {
+    data: availableFriends,
+    isLoading: loadingAvailableFriends,
+    isError: errorAvailableFriends,
+    error: errorAvailableFriendsMessage,
+  } = useGetAvailableFriendsQuery("");
+
+  const [
+    newGroup,
+    {
+      isLoading: loadingNewGroup,
+      isError: errorNewGroup,
+      error: errorNewGroupMessage,
+    },
+  ] = useAsyncMutation(useNewGroupMutation);
+
+  useErrors([
+    {
+      isError: errorAvailableFriends,
+      error: errorAvailableFriendsMessage,
+    },
+    {
+      isError: errorNewGroup,
+      error: errorNewGroupMessage,
+    },
+  ]);
+
+  const closeGroupHandler = () => {
+    setSelectedMembers([]);
+    dispatch(setIsNewGroup(false));
+  };
+
+  const submitHandler = () => {
+    if (!groupName.value) return toast.error("Group name is required");
+    if (selectedMembers.length < 1) {
+      return toast.error("Select at least one member");
+    }
+
+    newGroup("Creating new group...", {
+      name: groupName.value,
+      otherMembers: selectedMembers,
+    });
+
+    closeGroupHandler();
+  };
 
   const selectMemberHandler = (userId) => {
     if (!userId) return;
@@ -36,23 +90,21 @@ const NewGroup = () => {
     );
   };
 
-  const submitHandler = () => {};
+  useEffect(() => {
+    if (availableFriends?.friends?.length > 0) {
+      setMembers(
+        availableFriends.friends?.map((user) => ({ ...user, isAdded: false }))
+      );
+    }
+  }, [availableFriends]);
 
   useEffect(() => {
     setMembers((prev) => prev.map((user) => ({ ...user, isAdded: false })));
     setSelectedMembers([]);
   }, []);
 
-  const { isNewGroup } = useSelector((state) => state.misc);
-
-  const dispatch = useDispatch();
-
-  const closeGroup = () => {
-    dispatch(setIsNewGroup(false));
-  };
-
   return (
-    <Dialog open={isNewGroup} onClose={closeGroup}>
+    <Dialog open={isNewGroup} onClose={closeGroupHandler}>
       <Box
         sx={{
           p: { xs: "1.5rem", sm: "3rem" },
@@ -100,14 +152,26 @@ const NewGroup = () => {
             },
           }}
         >
-          {members.map((user) => (
-            <UserItem
-              user={user}
-              key={user._id}
-              handler={selectMemberHandler}
-              isAdded={Boolean(user.isAdded)}
-            />
-          ))}
+          {loadingAvailableFriends ? (
+            <Skeleton variant="rounded" height={40} />
+          ) : errorAvailableFriends ? (
+            <Typography variant="body2" color="error" textAlign="center">
+              {errorAvailableFriendsMessage}
+            </Typography>
+          ) : availableFriends?.friends?.length === 0 ? (
+            <Typography variant="body2" textAlign="center">
+              No available friends to add.
+            </Typography>
+          ) : (
+            members.map((user) => (
+              <UserItem
+                user={user}
+                key={user._id}
+                handler={selectMemberHandler}
+                isAdded={Boolean(user.isAdded)}
+              />
+            ))
+          )}
         </Stack>
 
         <Stack direction="row" justifyContent="space-between" mt={3}>
@@ -115,7 +179,7 @@ const NewGroup = () => {
             variant="contained"
             color="error"
             size="large"
-            onClick={close}
+            onClick={closeGroupHandler}
             sx={{ borderRadius: "8px", fontWeight: 600 }}
           >
             Cancel
@@ -124,7 +188,6 @@ const NewGroup = () => {
             variant="contained"
             color="primary"
             size="large"
-            disabled={groupName.error}
             sx={{
               bgcolor: "#28a745",
               "&:hover": { bgcolor: "#218838" },
@@ -133,6 +196,7 @@ const NewGroup = () => {
               fontWeight: 600,
             }}
             onClick={submitHandler}
+            disabled={groupName.value.length < 1 || selectedMembers.length < 1}
           >
             Create Group
           </Button>
