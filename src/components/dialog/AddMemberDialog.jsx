@@ -1,19 +1,64 @@
-import { Button, Dialog, DialogTitle, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogTitle,
+  List,
+  Skeleton,
+  Stack,
+  Typography,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { dialogBg } from "../../constants/color";
 import { sampleUsers } from "../../constants/sampleData";
+import { useAsyncMutation, useErrors } from "../../hooks/hook";
+import {
+  useAddMembersMutation,
+  useGetAvailableFriendsQuery,
+} from "../../redux/api/api";
+import { setIsAddMember } from "../../redux/reducers/misc.reducer";
 import UserItem from "../shared/UserItem";
 
-const AddMemberDialog = ({ addMember, isLoadingAddMember, chatId }) => {
-  const [members, setMembers] = useState(sampleUsers);
+const AddMemberDialog = ({ chatId }) => {
+  const { isAddMember } = useSelector((state) => state.misc);
+
   const [selectedMembers, setSelectedMembers] = useState([]);
 
-  const addMemberSubmitHandler = () => {
+  const dispatch = useDispatch();
+
+  const {
+    data: availableFriends,
+    isLoading: isLoadingAvailableFriends,
+    isError: isErrorAvailableFriends,
+    error: errorAvailableFriends,
+  } = useGetAvailableFriendsQuery(chatId);
+
+  const [
+    addMembers,
+    {
+      isLoading: isLoadingAddMember,
+      isError: isErrorAddMember,
+      error: errorAddMember,
+    },
+  ] = useAsyncMutation(useAddMembersMutation);
+
+  useErrors([
+    { isError: isErrorAddMember, error: errorAddMember },
+    { isError: isErrorAvailableFriends, error: errorAvailableFriends },
+  ]);
+
+  const addMembersSubmitHandler = () => {
+    addMembers("Adding Members...", {
+      chatId,
+      members: selectedMembers,
+    });
     closeHandler();
   };
 
   const closeHandler = () => {
-    setMembers(sampleUsers);
     setSelectedMembers([]);
+    dispatch(setIsAddMember(false));
   };
 
   const selectMemberHandler = (userId) => {
@@ -23,40 +68,77 @@ const AddMemberDialog = ({ addMember, isLoadingAddMember, chatId }) => {
         ? prev.filter((id) => id !== userId)
         : [...prev, userId]
     );
-    setMembers((prev) =>
-      prev.map((user) =>
-        user._id === userId ? { ...user, isAdded: !user.isAdded } : user
-      )
-    );
   };
 
-  useEffect(() => {
-    setMembers((prev) => prev.map((user) => ({ ...user, isAdded: false })));
-    setSelectedMembers([]);
-  }, []);
-
   return (
-    <Dialog open onClose={closeHandler}>
-      <Stack p={"2rem"} width={"20rem"} spacing={"2rem"}>
+    <Dialog open={isAddMember} onClose={closeHandler}>
+      <Box
+        sx={{
+          p: "1rem",
+          width: {
+            xs: "80vw",
+            sm: "70vw",
+            md: "50vw",
+            lg: "30vw",
+          },
+          height: "auto",
+          background: dialogBg,
+        }}
+      >
         <DialogTitle textAlign={"center"}>Add Member</DialogTitle>
         <Stack spacing={"1rem"}>
-          {members.length > 0 ? (
-            members.map((user) => (
-              <UserItem
-                user={user}
-                key={user.id}
-                handler={selectMemberHandler}
-                isAdded={Boolean(user.isAdded)}
+          <List
+            key={"AddMemberList"}
+            sx={{
+              maxHeight: "400px",
+              overflowY: "auto",
+              borderRadius: "8px",
+              backgroundColor: "white",
+              p: "0.5rem",
+              boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.1)",
+              "&::-webkit-scrollbar": {
+                display: "none",
+              },
+            }}
+          >
+            {isLoadingAvailableFriends ? (
+              <Skeleton
+                key={"AddMemberSkeleton"}
+                variant="rectangular"
+                width={"100%"}
+                height={100}
+                animation="wave"
+                sx={{
+                  borderRadius: "8px",
+                  marginBottom: "0.5rem",
+                }}
               />
-            ))
-          ) : (
-            <Typography textAlign={"center"}>No Known Found</Typography>
-          )}
+            ) : isErrorAvailableFriends ? (
+              <Typography textAlign={"center"} key={"AddMemberError"}>
+                {errorAvailableFriends?.data?.message ||
+                  errorAvailableFriends?.message ||
+                  "Something went wrong"}
+              </Typography>
+            ) : availableFriends?.friends?.length > 0 ? (
+              availableFriends?.friends?.map((user) => (
+                <UserItem
+                  user={user}
+                  key={user._id}
+                  handler={selectMemberHandler}
+                  isAdded={Boolean(selectedMembers?.includes(user._id))}
+                />
+              ))
+            ) : (
+              <Typography textAlign={"center"}>No Known Found</Typography>
+            )}
+          </List>
         </Stack>
         <Stack
           direction={"row"}
           justifyContent={"space-evenly"}
           alignItems={"center"}
+          paddingTop={2}
+          marginTop={2}
         >
           <Button color="error" variant="contained" onClick={closeHandler}>
             Cancel
@@ -65,12 +147,12 @@ const AddMemberDialog = ({ addMember, isLoadingAddMember, chatId }) => {
             color="success"
             variant="contained"
             disabled={isLoadingAddMember}
-            onClick={addMemberSubmitHandler}
+            onClick={addMembersSubmitHandler}
           >
             Submit Changes
           </Button>
         </Stack>
-      </Stack>
+      </Box>
     </Dialog>
   );
 };
