@@ -1,8 +1,19 @@
-import { Box, Button, Container, Typography } from "@mui/material";
-import React from "react";
-import { Link } from "react-router-dom";
+import { Error as ErrorIcon } from "@mui/icons-material";
+import { Button, Container, Typography } from "@mui/material";
+import React, { useEffect } from "react";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 const NotFound = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      navigate("/");
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, [navigate]);
+
   return (
     <Container
       maxWidth="md"
@@ -19,17 +30,15 @@ const NotFound = () => {
         variant="h1"
         sx={{ fontSize: "6rem", fontWeight: "bold", color: "#ff4c4c" }}
       >
+        <ErrorIcon
+          sx={{ fontSize: "5rem", color: "#ff4c4c", marginRight: 1 }}
+        />
         404
       </Typography>
       <Typography variant="h5" color="textSecondary" gutterBottom>
         Oops! The page you are looking for does not exist.
       </Typography>
-      <Box
-        component="img"
-        src="https://cdn.dribbble.com/users/285475/screenshots/2083086/media/7bc57fe8b53a7d7592b7de3ff09551d0.gif"
-        alt="Not Found"
-        sx={{ width: "100%", maxWidth: 400, my: 3 }}
-      />
+
       <Button
         variant="contained"
         color="primary"
