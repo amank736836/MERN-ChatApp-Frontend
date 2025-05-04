@@ -20,6 +20,7 @@ import {
   useGetNotificationsQuery,
 } from "../redux/api/api";
 import { setIsNotification } from "../redux/reducers/misc.reducer";
+import toast from "react-hot-toast";
 
 const Notifications = () => {
   const { isNotification } = useSelector((state) => state.misc);
@@ -69,10 +70,13 @@ const Notifications = () => {
 
   useEffect(() => {
     if (acceptFriendRequestData?.success) {
+      toast.success(acceptFriendRequestData.message, {
+        duration: 1000,
+      });
       setNotification((prev) =>
         prev.filter(
           (notification) =>
-            notification._id !== acceptFriendRequestData.senderId
+            notification.sender.id !== acceptFriendRequestData.senderId
         )
       );
     }
