@@ -4,8 +4,9 @@ import React, { useEffect, useState } from "react";
 import AdminLayout from "../../components/layout/AdminLayout";
 import RenderAttachment from "../../components/shared/RenderAttachment";
 import Table from "../../components/shared/Table";
-import { dashboardData } from "../../constants/sampleData";
+import { useErrors } from "../../hooks/hook";
 import { fileFormat, transformImageUrl } from "../../lib/features";
+import { useGetMessagesDashboardStatsQuery } from "../../redux/api/api";
 
 const columns = [
   {
@@ -27,7 +28,7 @@ const columns = [
           const fileType = fileFormat(url);
 
           return (
-            <Box key={index}>
+            <Box key={index} height={"100%"}>
               <a
                 href={url}
                 target="_blank"
@@ -35,6 +36,7 @@ const columns = [
                 style={{
                   color: "black",
                 }}
+                height={"100%"}
               >
                 {RenderAttachment(fileType, url)}
               </a>
@@ -68,7 +70,13 @@ const columns = [
     headerClassName: "table-header",
     width: 150,
     renderCell: (params) => (
-      <Stack direction={"row"} alignItems={"center"} spacing={"1rem"}>
+      <Stack
+        height={"100%"}
+        direction={"row"}
+        spacing={"1rem"}
+        alignItems={"center"}
+        justifyItems={"center"}
+      >
         <Avatar alt={params.row.name} src={params.row.sender.avatar} />
         <Typography>{params.row.sender.name}</Typography>
       </Stack>
@@ -95,11 +103,27 @@ const columns = [
 ];
 
 const MessageManagement = () => {
+  const {
+    data: messagesDashboardData,
+    isLoading: loadingMessagesDashboardData,
+    isError: errorMessagesDashboardData,
+    error: errorMessagesDashboardDataMessage,
+  } = useGetMessagesDashboardStatsQuery();
+
+  useErrors([
+    {
+      isError: errorMessagesDashboardData,
+      error: errorMessagesDashboardDataMessage,
+    },
+  ]);
+
+
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
+    if (!messagesDashboardData) return;
     setRows(
-      dashboardData.messages.map((message) => ({
+      messagesDashboardData.messages.map((message) => ({
         ...message,
         id: message._id,
         sender: {
@@ -109,16 +133,58 @@ const MessageManagement = () => {
         createdAt: moment(message.createdAt).format("MMMM Do YYYY, h:mm:ss a"),
       }))
     );
-  }, []);
+  }, [messagesDashboardData]);
 
   return (
     <AdminLayout>
-      <Table
-        headings={"All Messages"}
-        columns={columns}
-        rows={rows}
-        rowHeight={200}
-      />
+      {loadingMessagesDashboardData ? (
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Typography
+            fontSize={"2rem"}
+            fontWeight={600}
+            color={"black"}
+            textAlign={"center"}
+            margin={"2rem 0"}
+          >
+            Loading Messages...
+          </Typography>
+        </div>
+      ) : errorMessagesDashboardData ? (
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Typography
+            fontSize={"2rem"}
+            fontWeight={600}
+            color={"black"}
+            textAlign={"center"}
+            margin={"2rem 0"}
+          >
+            {errorMessagesDashboardDataMessage}
+          </Typography>
+        </div>
+      ) : (
+        <Table
+          headings={"All Messages"}
+          columns={columns}
+          rows={rows}
+          rowHeight={200}
+        />
+      )}
     </AdminLayout>
   );
 };
