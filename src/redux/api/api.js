@@ -6,7 +6,8 @@ const api = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: `${server}`,
   }),
-  tagTypes: ["Chat", "User"],
+  tagTypes: ["Chat", "User", "Request"],
+  refetchOnFocus: true,
   endpoints: (builder) => ({
     getMyChats: builder.query({
       query: () => ({
@@ -31,6 +32,7 @@ const api = createApi({
         credentials: "include",
       }),
       keepUnusedDataFor: 0,
+      // providesTags: ["Request"],
     }),
 
     getChatDetails: builder.query({
@@ -84,7 +86,7 @@ const api = createApi({
         method: "PUT",
         credentials: "include",
       }),
-      invalidatesTags: ["Chat"],
+      invalidatesTags: ["Chat", "Request"],
     }),
     sendAttachments: builder.mutation({
       query: (data) => ({
@@ -147,6 +149,40 @@ const api = createApi({
       }),
       invalidatesTags: ["Chat"],
     }),
+    getDashboardStats: builder.query({
+      query: () => ({
+        url: "/admin/stats",
+        method: "GET",
+        credentials: "include",
+      }),
+      keepUnusedDataFor: 0,
+    }),
+    getUsersDashboardStats: builder.query({
+      query: () => ({
+        url: "/admin/users",
+        method: "GET",
+        credentials: "include",
+      }),
+      keepUnusedDataFor: 0,
+    }),
+    getChatsDashboardStats: builder.query({
+      query: () => ({
+        url: "/admin/chats",
+        method: "GET",
+        credentials: "include",
+      }),
+      keepUnusedDataFor: 0,
+      providesTags: ["Chat"],
+    }),
+    getMessagesDashboardStats: builder.query({
+      query: () => ({
+        url: "/admin/messages",
+        method: "GET",
+        credentials: "include",
+      }),
+      keepUnusedDataFor: 0,
+      providesTags: ["Chat"],
+    }),
   }),
 });
 
@@ -160,6 +196,10 @@ export const {
   useGetMessagesQuery,
   useGetMyGroupsQuery,
   useGetAvailableFriendsQuery,
+  useGetDashboardStatsQuery,
+  useGetUsersDashboardStatsQuery,
+  useGetMessagesDashboardStatsQuery,
+  useGetChatsDashboardStatsQuery,
   useSendFriendRequestMutation,
   useAcceptFriendRequestMutation,
   useSendAttachmentsMutation,
