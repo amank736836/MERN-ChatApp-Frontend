@@ -364,7 +364,7 @@ const Groups = () => {
                   color="white"
                   fontSize={"3rem"}
                   marginLeft={"1rem"}
-                  fontWeight={800}
+                  fontWeight={600}
                   sx={{
                     display: "inline-block",
                     backgroundColor: "rgba(255, 255, 255, 0.2)",
