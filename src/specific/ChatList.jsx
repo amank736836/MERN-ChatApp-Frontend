@@ -37,7 +37,7 @@ const ChatList = ({
           ({ chatId }) => chatId === _id
         );
 
-        const isOnline = members?.some(({ member }) =>
+        const isOnline = members?.some((member) =>
           onlineUsers.includes(member)
         );
 
