@@ -1,10 +1,11 @@
-import { Avatar, Stack, Typography } from "@mui/material";
+import { Avatar, Skeleton, Stack, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import AdminLayout from "../../components/layout/AdminLayout";
 import AvatarCard from "../../components/shared/AvatarCard";
 import Table from "../../components/shared/Table";
-import { dashboardData } from "../../constants/sampleData";
+import { useErrors } from "../../hooks/hook";
 import { transformImageUrl } from "../../lib/features";
+import { useGetChatsDashboardStatsQuery } from "../../redux/api/api";
 
 const columns = [
   {
@@ -14,20 +15,12 @@ const columns = [
     width: 100,
   },
   {
-    field: "avatar",
-    headerName: "Avatar",
-    headerClassName: "table-header",
-    width: 100,
-    renderCell: (params) => {
-      return <AvatarCard max={1} avatar={params.row.avatar} />;
-    },
-  },
-  {
     field: "name",
     headerName: "Name",
     headerClassName: "table-header",
     width: 100,
   },
+
   {
     field: "totalMembers",
     headerName: "Total Members",
@@ -50,6 +43,12 @@ const columns = [
     width: 100,
   },
   {
+    field: "groupChat",
+    headerName: "Group Chat",
+    headerClassName: "table-header",
+    width: 100,
+  },
+  {
     field: "creator",
     headerName: "Created By",
     headerClassName: "table-header",
@@ -64,14 +63,29 @@ const columns = [
 ];
 
 const ChatManagement = () => {
+  const {
+    data: chatDashboardData,
+    isLoading: loadingChatDashboardData,
+    isError: errorChatDashboardData,
+    error: errorChatDashboardDataMessage,
+  } = useGetChatsDashboardStatsQuery();
+
+  useErrors([
+    {
+      isError: errorChatDashboardData,
+      error: errorChatDashboardDataMessage,
+    },
+  ]);
+
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
+    if (!chatDashboardData) return;
     setRows(
-      dashboardData.chats.map((chat) => ({
+      chatDashboardData.chats.map((chat) => ({
         ...chat,
         id: chat._id,
-        avatar: transformImageUrl(chat.avatar, 50),
+        avatar: chat.avatar.map((member) => transformImageUrl(member, 50)),
         members: chat.members.map((member) =>
           transformImageUrl(member.avatar, 50)
         ),
@@ -81,11 +95,54 @@ const ChatManagement = () => {
         },
       }))
     );
-  }, []);
+  }, [chatDashboardData]);
+
 
   return (
     <AdminLayout>
-      <Table headings={"All Chats"} columns={columns} rows={rows} />
+      {loadingChatDashboardData ? (
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Typography
+            fontSize={"2rem"}
+            fontWeight={600}
+            color={"black"}
+            textAlign={"center"}
+            margin={"2rem 0"}
+          >
+            Loading Chats...
+          </Typography>
+        </div>
+      ) : errorChatDashboardData ? (
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Typography
+            fontSize={"2rem"}
+            fontWeight={600}
+            color={"black"}
+            textAlign={"center"}
+            margin={"2rem 0"}
+          >
+            {errorChatDashboardDataMessage}
+          </Typography>
+        </div>
+      ) : (
+        <Table headings={"All Chats"} columns={columns} rows={rows} />
+      )}
     </AdminLayout>
   );
 };
