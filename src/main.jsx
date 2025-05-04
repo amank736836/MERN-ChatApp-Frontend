@@ -11,8 +11,8 @@ createRoot(document.getElementById("root")).render(
     <Provider store={store}>
       <CssBaseline />
       <div onContextMenu={(e) => e.preventDefault()}>
-        <App />
         <SpeedInsights />
+        <App />
       </div>
     </Provider>
   </StrictMode>
