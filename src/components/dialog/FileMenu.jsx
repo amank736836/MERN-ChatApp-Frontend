@@ -99,7 +99,7 @@ const FileMenu = ({ anchorE1, chatId }) => {
           id: toastId,
         });
       } else if (res.error) {
-        console.log(res.error);
+        console.error(res.error);
         toast.error(res.error.data.message || `Error uploading ${key}`, {
           duration: 1000,
           id: toastId,
