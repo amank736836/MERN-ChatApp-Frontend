@@ -22,7 +22,7 @@ const Login = lazy(() => import("./pages/Login"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 function App() {
-  const { user, loader } = useSelector((state) => state.auth);
+  const { user, loader, isAdmin } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
 
@@ -55,7 +55,7 @@ function App() {
           <Route
             element={
               <SocketProvider>
-                <ProtectRoute user={user} />
+                <ProtectRoute user={user} redirect="/login" />
               </SocketProvider>
             }
           >
@@ -73,10 +73,23 @@ function App() {
           />
 
           <Route path="/admin" element={<AdminLogin />} />
-          <Route path="/admin/dashboard" element={<Dashboard />} />
-          <Route path="/admin/users" element={<UserManagement />} />
-          <Route path="/admin/chats" element={<ChatManagement />} />
-          <Route path="/admin/messages" element={<MessageManagement />} />
+          <Route
+            path="/admin/login"
+            element={
+              <ProtectRoute user={!isAdmin} redirect="/admin/dashboard">
+                <AdminLogin />
+              </ProtectRoute>
+            }
+          />
+
+          <Route
+            element={<ProtectRoute user={isAdmin} redirect="/admin/login" />}
+          >
+            <Route path="/admin/dashboard" element={<Dashboard />} />
+            <Route path="/admin/users" element={<UserManagement />} />
+            <Route path="/admin/chats" element={<ChatManagement />} />
+            <Route path="/admin/messages" element={<MessageManagement />} />
+          </Route>
 
           <Route path="*" element={<NotFound />} />
         </Routes>
