@@ -1,11 +1,12 @@
 import { Drawer, Grid, Skeleton, Stack } from "@mui/material";
-import React, { lazy, useCallback, useEffect, useRef } from "react";
+import React, { lazy, useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { gradientBg } from "../../constants/color";
 import {
   NEW_MESSAGE_ALERT,
   NEW_REQUEST,
+  ONLINE_USERS,
   REFETCH_CHATS,
 } from "../../constants/events";
 import { useErrors, useSocketEvents } from "../../hooks/hook";
@@ -34,8 +35,11 @@ const AppLayout = () => (WrappedComponent) => {
     const { newMessagesAlert } = useSelector((state) => state.chat);
     const { isMobile } = useSelector((state) => state.misc);
 
+    const [onlineUsers, setOnlineUsers] = useState([]);
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
     const handleMobileClose = () => {
       dispatch(setIsMobile(false));
     };
@@ -93,10 +97,18 @@ const AppLayout = () => (WrappedComponent) => {
       [refetchChats]
     );
 
+    const onlineUsersListener = useCallback(
+      (data) => {
+        setOnlineUsers(data.onlineUsers);
+      },
+      [dispatch]
+    );
+
     const eventHandlers = {
       [NEW_MESSAGE_ALERT]: newMessagesAlertListener,
       [NEW_REQUEST]: newRequestListener,
       [REFETCH_CHATS]: refetchChatsListener,
+      [ONLINE_USERS]: onlineUsersListener,
     };
 
     useSocketEvents(socket, eventHandlers);
@@ -137,7 +149,7 @@ const AppLayout = () => (WrappedComponent) => {
               chats={chatsData.chats}
               chatId={chatId}
               newMessagesAlert={newMessagesAlert}
-              onlineUsers={["1", "2"]}
+              onlineUsers={onlineUsers}
               handleDeleteChat={handleDeleteChat}
             />
           </Drawer>
@@ -165,7 +177,7 @@ const AppLayout = () => (WrappedComponent) => {
                 chats={chatsData.chats}
                 chatId={chatId}
                 newMessagesAlert={newMessagesAlert}
-                onlineUsers={["1", "2"]}
+                onlineUsers={onlineUsers}
                 handleDeleteChat={handleDeleteChat}
               />
             )}
