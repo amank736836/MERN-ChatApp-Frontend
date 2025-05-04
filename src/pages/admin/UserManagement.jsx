@@ -1,11 +1,12 @@
-import { Avatar } from "@mui/material";
+import { Avatar, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import AdminLayout from "../../components/layout/AdminLayout";
 import Table from "../../components/shared/Table";
-import { dashboardData } from "../../constants/sampleData";
+import { useErrors } from "../../hooks/hook";
 import { transformImageUrl } from "../../lib/features";
+import { useGetUsersDashboardStatsQuery } from "../../redux/api/api";
 
-const columns = [
+const UserColumns = [
   {
     field: "id",
     headerName: "ID",
@@ -49,7 +50,7 @@ const columns = [
     field: "groups",
     headerName: "Groups",
     headerClassName: "table-header",
-    width: 100,
+    width: 90,
   },
   {
     field: "createdAt",
@@ -60,21 +61,78 @@ const columns = [
 ];
 
 const UserManagement = () => {
+  const {
+    data: userDashboardData,
+    isLoading: loadingUserDashboardData,
+    isError: errorUserDashboardData,
+    error: errorUserDashboardDataMessage,
+  } = useGetUsersDashboardStatsQuery();
+
+  useErrors([
+    {
+      isError: errorUserDashboardData,
+      error: errorUserDashboardDataMessage,
+    },
+  ]);
+
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
+    if (!userDashboardData) return;
     setRows(
-      dashboardData.users.map((user) => ({
+      userDashboardData.users.map((user) => ({
         ...user,
         id: user._id,
         avatar: transformImageUrl(user.avatar, 50),
       }))
     );
-  }, []);
+  }, [userDashboardData]);
 
   return (
     <AdminLayout>
-      <Table headings={"All Users"} columns={columns} rows={rows} />
+      {loadingUserDashboardData ? (
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Typography
+            fontSize={"2rem"}
+            fontWeight={600}
+            color={"black"}
+            textAlign={"center"}
+            margin={"2rem 0"}
+          >
+            Loading Users...
+          </Typography>
+        </div>
+      ) : errorUserDashboardData ? (
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Typography
+            fontSize={"2rem"}
+            fontWeight={600}
+            color={"black"}
+            textAlign={"center"}
+            margin={"2rem 0"}
+          >
+            {errorUserDashboardDataMessage}
+          </Typography>
+        </div>
+      ) : (
+        <Table headings={"All Users"} columns={UserColumns} rows={rows} />
+      )}
     </AdminLayout>
   );
 };
