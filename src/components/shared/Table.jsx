@@ -35,8 +35,8 @@ const Table = ({ rows, columns, headings, rowHeight = 52 }) => {
           sx={{
             border: "none",
             ".table-header": {
-              bgcolor: matBlack,
-              color: "white",
+              bgcolor: "white",
+              color: "black",
             },
           }}
         />
