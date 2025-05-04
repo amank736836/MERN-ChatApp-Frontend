@@ -37,11 +37,8 @@ const fileFormat = (url = "") => {
   return "file";
 };
 
-const transformImageUrl = (url = "", width = 100) => {
-  const newUrl = url.replace("upload", `upload/dpr_auto/w_${width}`);
-
-  return newUrl;
-};
+const transformImageUrl = (url = "", width = 100) =>
+  url.replace("upload", `upload/dpr_auto/w_${width}`);
 
 const getLast7Days = () => {
   const currentDate = moment();
