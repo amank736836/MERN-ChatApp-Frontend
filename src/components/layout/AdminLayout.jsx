@@ -16,6 +16,8 @@ import React, { useState } from "react";
 import { Link, Navigate, useLocation } from "react-router-dom";
 import { adminTabs } from "../../constants/adminTabs";
 import { grayColor, matBlack } from "../../constants/color";
+import { useDispatch, useSelector } from "react-redux";
+import { adminLogout } from "../../redux/thunks/admin.thunk";
 
 const LinkComponent = styled(Link)`
   text-decoration: none;
@@ -33,8 +35,11 @@ const LinkComponent = styled(Link)`
 
 const Sidebar = ({ w = "100%" }) => {
   const location = useLocation();
+  const dispatch = useDispatch();
 
-  const logoutHandler = () => {};
+  const logoutHandler = () => {
+    dispatch(adminLogout());
+  };
 
   return (
     <Stack
@@ -50,7 +55,7 @@ const Sidebar = ({ w = "100%" }) => {
       }}
     >
       <Typography variant="h5" textTransform={"uppercase"}>
-        Chattu
+        Stealthy Note
       </Typography>
 
       <Stack spacing={"1rem"}>
@@ -78,7 +83,12 @@ const Sidebar = ({ w = "100%" }) => {
           </LinkComponent>
         ))}
         <LinkComponent>
-          <Stack direction={"row"} alignItems={"center"} spacing={"1rem"}>
+          <Stack
+            direction={"row"}
+            alignItems={"center"}
+            spacing={"1rem"}
+            onClick={logoutHandler}
+          >
             <ExitToAppIcon />
             <Typography fontSize={"1.2rem"} fontWeight={600}>
               Logout
@@ -90,10 +100,9 @@ const Sidebar = ({ w = "100%" }) => {
   );
 };
 
-const isAdmin = true;
-
 const AdminLayout = ({ children }) => {
   const [isMobile, setIsMobile] = useState(false);
+  const { isAdmin } = useSelector((state) => state.auth);
 
   const handleMobile = () => {
     setIsMobile((prev) => !prev);
