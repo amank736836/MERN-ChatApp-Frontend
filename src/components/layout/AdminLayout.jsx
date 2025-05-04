@@ -13,10 +13,10 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
-import { Link, Navigate, useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Link, useLocation } from "react-router-dom";
 import { adminTabs } from "../../constants/adminTabs";
 import { grayColor, matBlack } from "../../constants/color";
-import { useDispatch, useSelector } from "react-redux";
 import { adminLogout } from "../../redux/thunks/admin.thunk";
 
 const LinkComponent = styled(Link)`
@@ -102,7 +102,6 @@ const Sidebar = ({ w = "100%" }) => {
 
 const AdminLayout = ({ children }) => {
   const [isMobile, setIsMobile] = useState(false);
-  const { isAdmin } = useSelector((state) => state.auth);
 
   const handleMobile = () => {
     setIsMobile((prev) => !prev);
@@ -111,10 +110,6 @@ const AdminLayout = ({ children }) => {
   const handleClose = () => {
     setIsMobile(false);
   };
-
-  if (!isAdmin) {
-    return <Navigate to="/admin" />;
-  }
 
   return (
     <Grid container minHeight={"100vh"}>
