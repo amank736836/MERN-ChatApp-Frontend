@@ -7,7 +7,7 @@ import {
   LinearScale,
   LineElement,
   PointElement,
-  Tooltip
+  Tooltip,
 } from "chart.js";
 import React from "react";
 import { Doughnut, Line } from "react-chartjs-2";
@@ -58,7 +58,7 @@ const LineChart = ({ value = [] }) => {
     datasets: [
       {
         data: value,
-        label: "Dataset 1",
+        label: "Messages",
         fill: true,
         backgroundColor: lightPurple,
         borderColor: purple,
@@ -88,7 +88,6 @@ const DoughnutChart = ({ value = [], labels = [] }) => {
     datasets: [
       {
         data: value,
-        label: "Total Chats vs Group Chats",
         fill: true,
         borderColor: [purple, orange],
         hoverBackgroundColor: [purple, orange],
@@ -108,4 +107,3 @@ const DoughnutChart = ({ value = [], labels = [] }) => {
 };
 
 export { DoughnutChart, LineChart };
-
