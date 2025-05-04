@@ -1,5 +1,6 @@
 import { Drawer, Grid, Skeleton, Stack } from "@mui/material";
 import React, { lazy, useCallback, useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { gradientBg } from "../../constants/color";
@@ -23,9 +24,7 @@ import {
 } from "../../redux/reducers/misc.reducer";
 import { getSocket } from "../../socket";
 import DeleteChatMenu from "../dialog/DeleteChatMenu";
-import Title from "../shared/Title";
 import Header from "./Header";
-import toast from "react-hot-toast";
 
 const ChatList = lazy(() => import("../../specific/ChatList"));
 const Profile = lazy(() => import("../../specific/Profile"));
@@ -122,7 +121,11 @@ const AppLayout = () => (WrappedComponent) => {
 
     return (
       <>
-        <Title title="Chat App" description="This is the chat App" />
+        <title>MERN Chat App</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content="MERN Chat App" />
+        <meta name="keywords" content="MERN, Chat, App" />
+        <meta name="author" content="Aman Kumar" />
         <Header />
         <DeleteChatMenu
           deleteOptionAnchor={deleteOptionAnchor}
