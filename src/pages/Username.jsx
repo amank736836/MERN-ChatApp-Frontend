@@ -48,6 +48,7 @@ const Username = () => {
       const response = await axios.post(`${server}/chat/sendMessage`, {
         content,
         username,
+        sender: user,
       });
 
       toast.success(response.data.message || "Message sent");
