@@ -2,6 +2,7 @@ import {
   CalendarMonth as CalendarIcon,
   Email as EmailIcon,
   Face as FaceIcon,
+  Link as LinkIcon,
   AlternateEmail as UsernameIcon,
 } from "@mui/icons-material";
 import { Avatar, Box, Stack, Typography } from "@mui/material";
@@ -10,9 +11,20 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { gradientBg } from "../constants/color";
 import { transformImageUrl } from "../lib/features";
+import toast from "react-hot-toast";
 
 const Profile = () => {
   const { user } = useSelector((state) => state.auth);
+
+  const baseUrl = `${window.location.origin}`;
+  const profileUrl = `${baseUrl}/u/${user.username}`;
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(profileUrl);
+    toast.success("Profile URL copied to clipboard!", {
+      duration: 2000,
+    });
+  };
 
   return (
     <Box
@@ -59,12 +71,18 @@ const Profile = () => {
           text={moment(user?.createdAt).fromNow(true)}
           Icon={<CalendarIcon />}
         />
+        <ProfileCard
+          heading="Profile URL"
+          text={profileUrl}
+          Icon={<LinkIcon />}
+          handler={copyToClipboard}
+        />
       </Stack>
     </Box>
   );
 };
 
-const ProfileCard = ({ text, Icon, heading }) => (
+const ProfileCard = ({ text, Icon, heading, handler = () => {} }) => (
   <Stack
     spacing={1}
     direction="row"
@@ -78,6 +96,7 @@ const ProfileCard = ({ text, Icon, heading }) => (
       alignItems: "center",
       justifyContent: "center",
     }}
+    onClick={handler}
   >
     {Icon && <Box sx={{ color: "#1976d2" }}>{Icon}</Box>}
     <Stack>
