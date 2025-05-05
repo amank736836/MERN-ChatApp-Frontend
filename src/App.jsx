@@ -8,6 +8,7 @@ import { LayoutLoader } from "./components/layout/Loaders";
 import { server } from "./constants/config";
 import { userExists, userNotExists } from "./redux/reducers/auth.reducer";
 import { SocketProvider } from "./socket";
+import Username from "./pages/Username";
 
 const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
 const Dashboard = lazy(() => import("./pages/admin/Dashboard"));
@@ -71,6 +72,8 @@ function App() {
               </ProtectRoute>
             }
           />
+
+          <Route path="/u/:username" element={<Username />} />
 
           <Route path="/admin" element={<AdminLogin />} />
           <Route
