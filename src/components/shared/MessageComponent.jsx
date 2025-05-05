@@ -29,7 +29,7 @@ const MessageComponent = ({ message, user }) => {
     >
       {!isSender && (
         <Typography color={lightBlue} fontWeight={600} variant="caption">
-          {sender.name}
+          {sender.name ? sender.name : "Anonymous"}
         </Typography>
       )}
 
