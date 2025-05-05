@@ -149,7 +149,7 @@ const AppLayout = () => (WrappedComponent) => {
           >
             <ChatList
               w="80vw"
-              chats={chatsData.chats}
+              chats={chatsData?.chats}
               chatId={chatId}
               newMessagesAlert={newMessagesAlert}
               onlineUsers={onlineUsers}
@@ -177,7 +177,7 @@ const AppLayout = () => (WrappedComponent) => {
               </Stack>
             ) : (
               <ChatList
-                chats={chatsData.chats}
+                chats={chatsData?.chats}
                 chatId={chatId}
                 newMessagesAlert={newMessagesAlert}
                 onlineUsers={onlineUsers}
