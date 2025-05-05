@@ -18,7 +18,7 @@ import AppLayout from "../components/layout/AppLayout";
 import { TypingLoader } from "../components/layout/Loaders";
 import MessageComponent from "../components/shared/MessageComponent";
 import { InputBox } from "../components/styles/StyledComponents";
-import { grayColor, orange } from "../constants/color";
+import { gradientBg, grayColor, orange } from "../constants/color";
 import {
   ALERT,
   CHAT_JOINED,
@@ -306,6 +306,7 @@ const Chat = ({ chatId }) => {
       <form
         style={{
           height: "10%",
+          background: "#00f2fe",
         }}
         onSubmit={submitHandler}
       >
@@ -320,6 +321,9 @@ const Chat = ({ chatId }) => {
             disabled={uploadingLoader}
             sx={{
               rotate: "30deg",
+              backgroundColor: orange,
+              marginRight: "1rem",
+              color: "white",
             }}
           >
             <AttachFileIcon />
