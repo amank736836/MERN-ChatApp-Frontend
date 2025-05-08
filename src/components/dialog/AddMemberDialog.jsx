@@ -8,10 +8,9 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { dialogBg } from "../../constants/color";
-import { sampleUsers } from "../../constants/sampleData";
 import { useAsyncMutation, useErrors } from "../../hooks/hook";
 import {
   useAddMembersMutation,
