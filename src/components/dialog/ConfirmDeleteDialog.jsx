@@ -6,12 +6,12 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useAsyncMutation, useErrors } from "../../hooks/hook";
-import { setIsDeleteMenu } from "../../redux/reducers/misc.reducer";
 import { useNavigate } from "react-router-dom";
+import { useAsyncMutation, useErrors } from "../../hooks/hook";
 import { useDeleteChatMutation } from "../../redux/api/api";
+import { setIsDeleteMenu } from "../../redux/reducers/misc.reducer";
 
 const confirmDeleteDialog = ({ chatId }) => {
   const dispatch = useDispatch();
