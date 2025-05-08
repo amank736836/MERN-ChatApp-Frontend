@@ -2,12 +2,6 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { server } from "../../constants/config";
 import axios from "axios";
 
-const initialState = {
-  user: null,
-  isAdmin: false,
-  loader: true,
-};
-
 const adminLogin = createAsyncThunk("admin/login", async (secretKey) => {
   const config = {
     headers: {
