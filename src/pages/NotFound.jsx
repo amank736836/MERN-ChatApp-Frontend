@@ -1,7 +1,7 @@
 import { Error as ErrorIcon } from "@mui/icons-material";
 import { Button, Container, Typography } from "@mui/material";
 import React, { useEffect } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const NotFound = () => {
   const navigate = useNavigate();
