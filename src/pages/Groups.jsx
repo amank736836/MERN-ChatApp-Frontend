@@ -78,7 +78,6 @@ const Groups = () => {
     error: errorGroupDetails,
   } = useGetChatDetailsQuery({ chatId, populate: true }, { skip: !chatId });
 
-
   const [
     updateGroupNameMutation,
     {
