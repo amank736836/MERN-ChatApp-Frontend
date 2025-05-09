@@ -18,7 +18,7 @@ import AppLayout from "../components/layout/AppLayout";
 import { TypingLoader } from "../components/layout/Loaders";
 import MessageComponent from "../components/shared/MessageComponent";
 import { InputBox } from "../components/styles/StyledComponents";
-import { gradientBg, grayColor, orange } from "../constants/color";
+import { grayColor, orange } from "../constants/color";
 import {
   ALERT,
   CHAT_JOINED,
