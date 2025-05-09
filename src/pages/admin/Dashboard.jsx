@@ -5,11 +5,10 @@ import {
   Notifications as NotificationsIcon,
   Person as PersonIcon,
 } from "@mui/icons-material";
-import { Container, Paper, Skeleton, Stack, Typography } from "@mui/material";
+import { Container, Paper, Stack, Typography } from "@mui/material";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import AdminLayout from "../../components/layout/AdminLayout";
-import { LayoutLoader } from "../../components/layout/Loaders";
 import {
   CurveButton,
   SearchField,
