@@ -96,15 +96,6 @@ const Groups = () => {
     },
   ] = useAsyncMutation(useRemoveMemberMutation);
 
-  const [
-    addMembersMutation,
-    {
-      isLoading: isLoadingAddMember,
-      isError: isErrorAddMember,
-      error: errorAddMember,
-    },
-  ] = useAsyncMutation(useAddMembersMutation);
-
   useErrors([
     {
       isError: isErrorMyGroups,
