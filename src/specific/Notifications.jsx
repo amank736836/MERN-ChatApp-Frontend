@@ -11,6 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { memo, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { dialogBg } from "../constants/color";
 import { useAsyncMutation, useErrors } from "../hooks/hook";
@@ -20,7 +21,6 @@ import {
   useGetNotificationsQuery,
 } from "../redux/api/api";
 import { setIsNotification } from "../redux/reducers/misc.reducer";
-import toast from "react-hot-toast";
 
 const Notifications = () => {
   const { isNotification } = useSelector((state) => state.misc);
