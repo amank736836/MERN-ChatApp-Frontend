@@ -6,14 +6,14 @@ import {
   AlternateEmail as UsernameIcon,
 } from "@mui/icons-material";
 import { Avatar, Box, Stack, Switch, Typography } from "@mui/material";
+import axios from "axios";
 import moment from "moment";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { gradientBg } from "../constants/color";
-import { transformImageUrl } from "../lib/features";
-import toast from "react-hot-toast";
-import axios from "axios";
 import { server } from "../constants/config";
+import { transformImageUrl } from "../lib/features";
 
 const Profile = () => {
   const { user } = useSelector((state) => state.auth);
