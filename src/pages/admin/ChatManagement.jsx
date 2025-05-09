@@ -1,4 +1,4 @@
-import { Avatar, Skeleton, Stack, Typography } from "@mui/material";
+import { Avatar, Stack, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import AdminLayout from "../../components/layout/AdminLayout";
 import AvatarCard from "../../components/shared/AvatarCard";
@@ -96,7 +96,6 @@ const ChatManagement = () => {
       }))
     );
   }, [chatDashboardData]);
-
 
   return (
     <AdminLayout>
