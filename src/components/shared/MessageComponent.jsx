@@ -1,10 +1,10 @@
 import { Box, Typography } from "@mui/material";
+import { motion } from "framer-motion";
 import moment from "moment";
 import React, { memo } from "react";
 import { lightBlue } from "../../constants/color";
 import { fileFormat } from "../../lib/features";
 import RenderAttachment from "./RenderAttachment";
-import { motion } from "framer-motion";
 
 const MessageComponent = ({ message, user }) => {
   const { sender, content, attachments = [], createdAt } = message;
