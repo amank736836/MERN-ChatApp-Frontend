@@ -1,8 +1,8 @@
 import { Box, Stack, Typography } from "@mui/material";
+import { motion } from "framer-motion";
 import React, { memo } from "react";
 import { StyledLink } from "../styles/StyledComponents";
 import AvatarCard from "./AvatarCard";
-import { motion } from "framer-motion";
 
 const ChatItem = ({
   avatar = [],
