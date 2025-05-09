@@ -117,7 +117,6 @@ const MessageManagement = () => {
     },
   ]);
 
-
   const [rows, setRows] = useState([]);
 
   useEffect(() => {
