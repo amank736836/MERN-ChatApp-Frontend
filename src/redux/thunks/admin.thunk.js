@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { server } from "../../constants/config";
 import axios from "axios";
+import { server } from "../../constants/config";
 
 const adminLogin = createAsyncThunk("admin/login", async (secretKey) => {
   const config = {
@@ -51,4 +51,4 @@ const adminLogout = createAsyncThunk("admin/logout", async () => {
   }
 });
 
-export { adminLogin, getAdmin, adminLogout };
+export { adminLogin, adminLogout, getAdmin };
