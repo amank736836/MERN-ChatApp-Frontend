@@ -5,13 +5,13 @@ import {
 import { Menu, Stack, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { useAsyncMutation, useErrors } from "../../hooks/hook";
-import { setIsDeleteMenu } from "../../redux/reducers/misc.reducer";
 import {
   useDeleteChatMutation,
   useLeaveGroupMutation,
 } from "../../redux/api/api";
-import { useNavigate } from "react-router-dom";
+import { setIsDeleteMenu } from "../../redux/reducers/misc.reducer";
 
 const DeleteChatMenu = ({ deleteOptionAnchor }) => {
   const dispatch = useDispatch();
