@@ -113,10 +113,6 @@ const Groups = () => {
       isError: isErrorRemoveMember,
       error: errorRemoveMember,
     },
-    {
-      isError: isErrorAddMember,
-      error: errorAddMember,
-    },
   ]);
 
   const navigateBack = () => navigate("/");
