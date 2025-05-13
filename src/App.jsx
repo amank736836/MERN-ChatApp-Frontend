@@ -1,12 +1,14 @@
 import axios from "axios";
-import React, { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import ProtectRoute from "./components/auth/ProtectRoute";
 import { LayoutLoader } from "./components/layout/Loaders";
 import { server } from "./constants/config";
+import Forgot from "./pages/forgot";
 import Username from "./pages/Username";
+import Verify from "./pages/verify";
 import { userExists, userNotExists } from "./redux/reducers/auth.reducer";
 import { SocketProvider } from "./socket";
 
@@ -64,14 +66,12 @@ function App() {
             <Route path="/chat/:chatId" element={<Chat />} />
             <Route path="/groups" element={<Groups />} />
           </Route>
-          <Route
-            path="/login"
-            element={
-              <ProtectRoute user={!user} redirect="/">
-                <Login />
-              </ProtectRoute>
-            }
-          />
+
+          <Route element={<ProtectRoute user={!user} redirect="/" />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/verify" element={<Verify />} />
+            <Route path="/forgot" element={<Forgot />} />
+          </Route>
 
           <Route path="/u/:username" element={<Username />} />
 
@@ -79,11 +79,11 @@ function App() {
           <Route
             path="/admin/login"
             element={
-              <ProtectRoute user={!isAdmin} redirect="/admin/dashboard">
-                <AdminLogin />
-              </ProtectRoute>
+              <ProtectRoute user={!isAdmin} redirect="/admin/dashboard" />
             }
-          />
+          >
+            <Route path="/admin/login" element={<AdminLogin />} />
+          </Route>
 
           <Route
             element={<ProtectRoute user={isAdmin} redirect="/admin/login" />}
