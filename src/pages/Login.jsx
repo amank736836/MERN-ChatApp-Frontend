@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import React, { useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -54,11 +54,13 @@ const Login = () => {
       const res = await axios.post(
         `${server}/user/login`,
         {
-          username: username.value,
+          identifier: username.value,
           password: password.value,
         },
         config
       );
+
+      console.log(res.data);
 
       dispatch(userExists(res.data.user));
 
@@ -79,10 +81,30 @@ const Login = () => {
           navigate("/");
         });
     } catch (error) {
+      if (error?.response?.data?.message === "User not found") {
+        toast.error("User not found", {
+          duration: 1000,
+          id: toastId,
+        });
+        toggleLogin();
+        return;
+      }
+
       toast.error(error?.response?.data?.message || "Login failed", {
         duration: 1000,
         id: toastId,
       });
+      toast
+        .promise(new Promise((resolve) => resolve()), {
+          loading: "Redirecting...",
+          success: "Redirected!",
+          error: "Redirect failed",
+          id: toastId,
+          duration: 1000,
+        })
+        .then(() => {
+          navigate(`/verify?identifier=${username.value}`);
+        });
     } finally {
       setIsLoading(false);
     }
@@ -123,7 +145,7 @@ const Login = () => {
           id: toastId,
         })
         .then(() => {
-          navigate("/");
+          navigate("/verify?identifier=" + username.value);
         });
     } catch (error) {
       console.error(error);
@@ -211,7 +233,7 @@ const Login = () => {
                   Login
                 </Button>
                 <Typography textAlign="center" mt={2}>
-                  OR
+                  Don't have an account?{" "}
                 </Typography>
                 <Button
                   fullWidth
@@ -224,6 +246,17 @@ const Login = () => {
                   Sign Up
                 </Button>
               </form>
+              <Typography textAlign={"center"} m={"0.5rem"}>
+                Forgot your password?{" "}
+                <Button
+                  variant="text"
+                  color="primary"
+                  onClick={() => navigate("/forgot")}
+                  sx={{ textTransform: "none" }}
+                >
+                  Reset it
+                </Button>
+              </Typography>
             </>
           ) : (
             <>
@@ -322,7 +355,7 @@ const Login = () => {
                 </Button>
               </form>
               <Typography textAlign="center" mt={2}>
-                OR
+                Already have an account?{" "}
               </Typography>
               <Button
                 fullWidth
