@@ -28,18 +28,18 @@ const Profile = () => {
     });
   };
 
-  const [isAcceptingMessages, setIsAcceptingMessages] = useState(
-    user?.isAcceptingMessages || false
+  const [isAcceptingMessage, setIsAcceptingMessage] = useState(
+    user?.isAcceptingMessage || false
   );
 
   const handleAcceptMessages = async () => {
-    setIsAcceptingMessages((prev) => !prev);
+    setIsAcceptingMessage((prev) => !prev);
     const toastId = toast.loading("Updating Accepting Messages...");
     try {
       const response = await axios.post(
         `${server}/user/acceptMessages`,
         {
-          isAcceptingMessages: !isAcceptingMessages,
+          isAcceptingMessage: !isAcceptingMessage,
         },
         {
           withCredentials: true,
@@ -49,14 +49,14 @@ const Profile = () => {
       if (response.data.success) {
         toast.success(
           `You are now ${
-            !isAcceptingMessages ? "accepting" : "not accepting"
+            !isAcceptingMessage ? "accepting" : "not accepting"
           } messages!`,
           {
             duration: 1000,
             id: toastId,
           }
         );
-        setIsAcceptingMessages(!isAcceptingMessages);
+        setIsAcceptingMessage(!isAcceptingMessage);
       } else {
         toast.error("Failed to update accepting messages", {
           duration: 1000,
@@ -124,10 +124,10 @@ const Profile = () => {
               Accept Anonymous Messages
             </Typography>
             <Typography color="gray" variant="caption">
-              {isAcceptingMessages}
+              {isAcceptingMessage}
             </Typography>
           </Stack>
-          <Switch checked={isAcceptingMessages} color="primary" size="medium" />
+          <Switch checked={isAcceptingMessage} color="primary" size="medium" />
         </Stack>
         <ProfileCard heading="Name" text={user?.name} Icon={<FaceIcon />} />
         <ProfileCard
@@ -141,7 +141,7 @@ const Profile = () => {
           text={moment(user?.createdAt).fromNow(true)}
           Icon={<CalendarIcon />}
         />
-        {isAcceptingMessages && (
+        {isAcceptingMessage && (
           <ProfileCard
             heading="Profile URL"
             text={profileUrl}
