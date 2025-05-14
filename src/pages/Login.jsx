@@ -60,8 +60,6 @@ const Login = () => {
         config
       );
 
-      console.log(res.data);
-
       dispatch(userExists(res.data.user));
 
       toast.success("Login successful!", {
@@ -87,6 +85,14 @@ const Login = () => {
           id: toastId,
         });
         toggleLogin();
+        return;
+      }
+      if (error?.response?.data?.message === "Invalid password") {
+        toast.error("Invalid password", {
+          duration: 1000,
+          id: toastId,
+        });
+        navigate("/forgot");
         return;
       }
 
