@@ -22,6 +22,7 @@ const Login = lazy(() => import("./pages/Login"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const Forgot = lazy(() => import("./pages/Forgot"));
 const Username = lazy(() => import("./pages/Username"));
+const Verify = lazy(() => import("./pages/Verify"));
 
 function App() {
   const { user, loader, isAdmin } = useSelector((state) => state.auth);
