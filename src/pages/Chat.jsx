@@ -4,7 +4,7 @@ import {
   Send as SendIcon,
 } from "@mui/icons-material";
 import { IconButton, Stack } from "@mui/material";
-import React, {
+import {
   Fragment,
   useCallback,
   useEffect,
@@ -28,7 +28,10 @@ import {
   STOP_TYPING,
 } from "../constants/events";
 import { useErrors, useSocketEvents } from "../hooks/hook";
-import { useGetChatDetailsQuery, useGetMessagesQuery } from "../redux/api/api";
+import {
+  useGetChatDetailsQuery,
+  useGetMessagesQuery
+} from "../redux/api/api";
 import { removeNewMessagesAlert } from "../redux/reducers/chat.reducer";
 import { setIsFileMenu } from "../redux/reducers/misc.reducer";
 import { getSocket } from "../socket";
@@ -292,11 +295,7 @@ const Chat = ({ chatId }) => {
         ) : (
           <>
             {allMessages.map((message) => (
-              <MessageComponent
-                message={message}
-                key={message._id}
-                user={user}
-              />
+              <MessageComponent message={message} key={message._id} />
             ))}
           </>
         )}
