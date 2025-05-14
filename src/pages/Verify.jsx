@@ -27,7 +27,7 @@ const Verify = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    const toastId = toast.loading("Updating password...");
+    const toastId = toast.loading("Verifying account...");
     try {
       const config = {
         headers: {
