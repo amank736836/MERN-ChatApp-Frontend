@@ -1,17 +1,42 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { motion } from "framer-motion";
 import moment from "moment";
-import React, { memo } from "react";
+import { memo } from "react";
+import { useSelector } from "react-redux";
 import { lightBlue } from "../../constants/color";
 import { fileFormat } from "../../lib/features";
 import RenderAttachment from "./RenderAttachment";
+import { useSendFriendRequestMutation } from "../../redux/api/api";
+import { useAsyncMutation, useErrors } from "../../hooks/hook";
 
-const MessageComponent = ({ message, user }) => {
+const MessageComponent = ({ message }) => {
+  const { user } = useSelector((state) => state.auth);
   const { sender, content, attachments = [], createdAt } = message;
 
   const isSender = sender._id === user._id;
 
   const timeAgo = moment(createdAt).fromNow();
+
+  const [
+    sendFriendRequest,
+    {
+      isLoading: isLoadingSendFriendRequest,
+      isError: sendFriendRequestError,
+      error: sendFriendRequestErrorData,
+    },
+  ] = useAsyncMutation(useSendFriendRequestMutation);
+
+  useErrors([
+    {
+      isError: sendFriendRequestError,
+      error: sendFriendRequestErrorData,
+    },
+  ]);
+
+  const sendFriendRequestHandler = async (userId) => {
+    if (!userId) return;
+    await sendFriendRequest("Sending friend request...", userId);
+  };
 
   return (
     <motion.div
@@ -31,6 +56,22 @@ const MessageComponent = ({ message, user }) => {
         <Typography color={lightBlue} fontWeight={600} variant="caption">
           {sender.name ? sender.name : "Anonymous"}
         </Typography>
+      )}
+
+      {!isSender && message.chat === user._id && (
+        <Button
+          onClick={() => sendFriendRequestHandler(sender._id)}
+          disabled={isLoadingSendFriendRequest}
+          variant="outlined"
+          size="small"
+          sx={{
+            marginLeft: "0.5rem",
+            color: lightBlue,
+            borderColor: lightBlue,
+          }}
+        >
+          {isLoadingSendFriendRequest ? "Sending..." : "Add Friend"}
+        </Button>
       )}
 
       {attachments.length > 0 &&
