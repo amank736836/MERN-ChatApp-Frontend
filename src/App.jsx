@@ -6,9 +6,6 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import ProtectRoute from "./components/auth/ProtectRoute";
 import { LayoutLoader } from "./components/layout/Loaders";
 import { server } from "./constants/config";
-import Forgot from "./pages/forgot";
-import Username from "./pages/Username";
-import Verify from "./pages/verify";
 import { userExists, userNotExists } from "./redux/reducers/auth.reducer";
 import { SocketProvider } from "./socket";
 
@@ -23,6 +20,8 @@ const Chat = lazy(() => import("./pages/Chat"));
 const Groups = lazy(() => import("./pages/Groups"));
 const Login = lazy(() => import("./pages/Login"));
 const NotFound = lazy(() => import("./pages/NotFound"));
+const Forgot = lazy(() => import("./pages/forgot"));
+const Username = lazy(() => import("./pages/Username"));
 
 function App() {
   const { user, loader, isAdmin } = useSelector((state) => state.auth);
