@@ -20,7 +20,7 @@ const Chat = lazy(() => import("./pages/Chat"));
 const Groups = lazy(() => import("./pages/Groups"));
 const Login = lazy(() => import("./pages/Login"));
 const NotFound = lazy(() => import("./pages/NotFound"));
-const Forgot = lazy(() => import("./pages/forgot"));
+const Forgot = lazy(() => import("./pages/Forgot"));
 const Username = lazy(() => import("./pages/Username"));
 
 function App() {
