@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { authBg } from "../../constants/color";
 import { adminLogin, getAdmin } from "../../redux/thunks/admin.thunk";
+import { useNavigate } from "react-router-dom";
 
 const AdminLogin = () => {
   const { isAdmin } = useSelector((state) => state.auth);
