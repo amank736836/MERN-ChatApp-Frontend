@@ -20,10 +20,10 @@ const Forgot = () => {
   const verifyCodeParam = query.get("verifyCode");
 
   useEffect(() => {
-    if (usernameParam || verifyCodeParam) {
+    if (usernameParam && verifyCodeParam) {
       setIsForgotPassword(false);
     }
-  }, [usernameParam]);
+  }, [usernameParam, verifyCodeParam]);
 
   const identifier = useInputValidation(usernameParam || "", usernameValidator);
   const password = useStrongPassword("");
@@ -209,6 +209,19 @@ const Forgot = () => {
                   Verify Forgot Password
                 </Button>
               </form>
+              <Typography textAlign={"center"} m={"0.5rem"}>
+                Know your password?{" "}
+                <Button
+                  variant="text"
+                  color="primary"
+                  onClick={() =>
+                    navigate(`/login?identifier=${identifier.value}`)
+                  }
+                  sx={{ textTransform: "none" }}
+                >
+                  Login
+                </Button>
+              </Typography>
             </>
           ) : (
             <>
@@ -291,7 +304,6 @@ const Forgot = () => {
                 variant="outlined"
                 color="secondary"
                 onClick={toggleVerify}
-                sx={{ mt: 2 }}
                 disabled={isLoading}
               >
                 Forgot Password
