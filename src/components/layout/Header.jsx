@@ -1,4 +1,5 @@
 import {
+  AccountCircle as AccountCircleIcon,
   Add as AddIcon,
   Close as CloseIcon,
   Group as GroupIcon,
@@ -29,6 +30,7 @@ import {
   setIsMobile,
   setIsNewGroup,
   setIsNotification,
+  setIsProfile,
   setIsSearch,
 } from "../../redux/reducers/misc.reducer";
 
@@ -40,9 +42,8 @@ const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { isMobile, isSearch, isNotification, isNewGroup } = useSelector(
-    (state) => state.misc
-  );
+  const { isMobile, isSearch, isNotification, isNewGroup, isProfile } =
+    useSelector((state) => state.misc);
 
   const { notificationCount } = useSelector((state) => state.chat);
 
@@ -61,6 +62,10 @@ const Header = () => {
 
   const openNewGroup = () => {
     dispatch(setIsNewGroup(true));
+  };
+
+  const openProfile = () => {
+    dispatch(setIsProfile(true));
   };
 
   const logoutHandler = async () => {
@@ -120,7 +125,6 @@ const Header = () => {
 
           <Box sx={{ flexGrow: 1 }} />
 
-          {/* Icons Section */}
           <Box display="flex" gap={1}>
             <IconBtn
               title="Search"
@@ -149,10 +153,17 @@ const Header = () => {
               icon={<LogoutIcon />}
             />
           </Box>
+
+          <Box sx={{ display: { xs: "block", lg: "none" } }}>
+            <IconBtn
+              title="Profile"
+              onClick={openProfile}
+              icon={<AccountCircleIcon />}
+            />
+          </Box>
         </Toolbar>
       </AppBar>
 
-      {/* Dialogs */}
       {isSearch && (
         <Suspense fallback={<Backdrop open={true} />}>
           <SearchDialog />
