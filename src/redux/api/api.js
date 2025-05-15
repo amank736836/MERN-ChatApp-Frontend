@@ -32,6 +32,7 @@ const api = createApi({
         credentials: "include",
       }),
       keepUnusedDataFor: 0,
+      providesTags: ["Request"],
     }),
 
     getChatDetails: builder.query({
