@@ -99,7 +99,7 @@ const Header = () => {
         sx={{
           bgcolor: "#4facfe",
           boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
-          paddingX: "1rem",
+          // paddingX: "1rem",
         }}
       >
         <Toolbar>
