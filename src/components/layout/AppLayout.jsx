@@ -171,7 +171,11 @@ const AppLayout = () => (WrappedComponent) => {
             anchor="left"
             sx={{
               "& .MuiDrawer-paper": {
-                width: "80vw",
+                width: {
+                  xs: "85vw",
+                  sm: "75vw",
+                  md: "42vw",
+                },
                 background: gradientBg,
                 boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
               },
