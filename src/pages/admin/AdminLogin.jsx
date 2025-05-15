@@ -1,12 +1,15 @@
 import { useInputValidation } from "6pp";
 import { Button, Container, Paper, TextField, Typography } from "@mui/material";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { authBg } from "../../constants/color";
 import { adminLogin, getAdmin } from "../../redux/thunks/admin.thunk";
 
 const AdminLogin = () => {
+  const { isAdmin } = useSelector((state) => state.auth);
+
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const secretKey = useInputValidation("");
 
@@ -14,6 +17,12 @@ const AdminLogin = () => {
     e.preventDefault();
     dispatch(adminLogin(secretKey.value));
   };
+
+  useEffect(() => {
+    if (isAdmin) {
+      navigate("/admin/dashboard");
+    }
+  }, [isAdmin]);
 
   useEffect(() => {
     dispatch(getAdmin());
