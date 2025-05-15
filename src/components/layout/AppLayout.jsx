@@ -20,6 +20,7 @@ import {
 import {
   setIsDeleteMenu,
   setIsMobile,
+  setIsProfile,
   setSelectedDeleteChat,
 } from "../../redux/reducers/misc.reducer";
 import { getSocket } from "../../socket";
@@ -32,7 +33,7 @@ const Profile = lazy(() => import("../../specific/Profile"));
 const AppLayout = () => (WrappedComponent) => {
   return (props) => {
     const { newMessagesAlert } = useSelector((state) => state.chat);
-    const { isMobile } = useSelector((state) => state.misc);
+    const { isMobile, isProfile } = useSelector((state) => state.misc);
 
     const [onlineUsers, setOnlineUsers] = useState([]);
 
@@ -41,6 +42,10 @@ const AppLayout = () => (WrappedComponent) => {
 
     const handleMobileClose = () => {
       dispatch(setIsMobile(false));
+    };
+
+    const handleProfileClose = () => {
+      dispatch(setIsProfile(false));
     };
 
     const params = useParams();
@@ -155,6 +160,24 @@ const AppLayout = () => (WrappedComponent) => {
               onlineUsers={onlineUsers}
               handleDeleteChat={handleDeleteChat}
             />
+          </Drawer>
+        )}
+        {isLoadingChats ? (
+          <Skeleton />
+        ) : (
+          <Drawer
+            open={isProfile}
+            onClose={handleProfileClose}
+            anchor="left"
+            sx={{
+              "& .MuiDrawer-paper": {
+                width: "80vw",
+                background: gradientBg,
+                boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+              },
+            }}
+          >
+            <Profile />
           </Drawer>
         )}
         <Grid container height={"calc(100vh - 4rem)"}>
