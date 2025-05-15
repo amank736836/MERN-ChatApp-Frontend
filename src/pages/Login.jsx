@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -26,9 +26,24 @@ const Login = () => {
 
   const toggleLogin = () => setIsLogin((prev) => !prev);
 
+  const query = new URLSearchParams(window.location.search);
+  const identifierParam = query.get("identifier");
+  let usernameParam;
+  let emailParam;
+
+  useEffect(() => {
+    if (identifierParam) {
+      if (identifierParam.includes("@")) {
+        emailParam = identifierParam;
+      } else {
+        usernameParam = identifierParam;
+      }
+    }
+  }, [identifierParam]);
+
   const name = useInputValidation("");
-  const email = useInputValidation("");
-  const username = useInputValidation("", usernameValidator);
+  const email = useInputValidation(emailParam || "");
+  const username = useInputValidation(usernameParam || "", usernameValidator);
   const password = useStrongPassword("");
   const confirmPassword = useStrongPassword("");
   const avatar = useFileHandler("single", 2);
@@ -92,7 +107,7 @@ const Login = () => {
           duration: 1000,
           id: toastId,
         });
-        navigate("/forgot");
+        navigate(`/forgot?identifier=${username.value}`);
         return;
       }
 
@@ -257,7 +272,9 @@ const Login = () => {
                 <Button
                   variant="text"
                   color="primary"
-                  onClick={() => navigate("/forgot")}
+                  onClick={() =>
+                    navigate(`/forgot?identifier=${username.value}`)
+                  }
                   sx={{ textTransform: "none" }}
                 >
                   Reset it
