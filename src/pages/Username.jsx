@@ -54,6 +54,7 @@ const Username = () => {
       toast.success(response.data.message || "Message sent");
       if (response.data.success) setContent("");
     } catch (error) {
+      console.log(error);
       toast.error("Failed to send message. Please try again.");
     } finally {
       setIsLoading(false);
