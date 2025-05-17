@@ -64,6 +64,7 @@ const Profile = () => {
         });
       }
     } catch (error) {
+      console.error(error);
       toast.error("Failed to update accepting messages", {
         duration: 1000,
         id: toastId,
