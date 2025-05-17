@@ -94,6 +94,7 @@ const Login = () => {
           navigate("/");
         });
     } catch (error) {
+      console.error(error);
       if (error?.response?.data?.message === "User not found") {
         toast.error("User not found", {
           duration: 1000,
