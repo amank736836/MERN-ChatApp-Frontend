@@ -54,7 +54,7 @@ const Username = () => {
       toast.success(response.data.message || "Message sent");
       if (response.data.success) setContent("");
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast.error("Failed to send message. Please try again.");
     } finally {
       setIsLoading(false);
@@ -77,6 +77,7 @@ const Username = () => {
         toast.error("Failed to fetch suggested messages. Please try again.");
       }
     } catch (error) {
+      console.error(error);
       toast.error("Failed to fetch suggested messages. Please try again.");
       setCompletionError(error);
     } finally {
